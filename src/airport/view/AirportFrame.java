@@ -219,7 +219,7 @@ public class AirportFrame extends javax.swing.JFrame {
         RefreshFlights = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        refreshpas = new javax.swing.JTable();
         RefreshPassengers = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -1067,8 +1067,8 @@ public class AirportFrame extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Show my flights", jPanel7);
 
-        jTable2.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        refreshpas.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        refreshpas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -1091,7 +1091,7 @@ public class AirportFrame extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(refreshpas);
 
         RefreshPassengers.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         RefreshPassengers.setText("Refresh");
@@ -1458,8 +1458,17 @@ public class AirportFrame extends javax.swing.JFrame {
         String phoneCode = Pre.getText();
         String phone = Number.getText();
         String country = Country.getText();
-
         
+        int ide = Integer.parseInt(id);
+        int phonecod = Integer.parseInt(phoneCode);
+        int phonee = Integer.parseInt(phone);
+        int yeare = Integer.parseInt(year);
+        int monthe = Integer.parseInt(month);
+        int daye = Integer.parseInt(day);
+        
+        LocalDate birthDate = LocalDate.of(yeare, monthe, daye);
+
+        this.passengers.add(new Passenger(ide, firstname, lastname, birthDate, phonecod, phonee, country));
         this.userSelect.addItem("" + id);
         
         Responses response = PassengerController.createPassenger(id, firstname, lastname, year, month, day, phoneCode, phone, country);
@@ -1493,6 +1502,7 @@ public class AirportFrame extends javax.swing.JFrame {
         int maxCapacity = Integer.parseInt(MaxCapacity.getText());
         String airline = Airline.getText();
 
+       
         this.planes.add(new Plane(id, brand, model, maxCapacity, airline));
 
         this.Plane.addItem(id);
@@ -1654,7 +1664,7 @@ public class AirportFrame extends javax.swing.JFrame {
 
     private void RefreshPassengersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshPassengersActionPerformed
         // TODO add your handling code here:
-        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+        DefaultTableModel model = (DefaultTableModel) refreshpas.getModel();
         model.setRowCount(0);
         for (Passenger passenger : this.passengers) {
             model.addRow(new Object[]{passenger.getId(), passenger.getFullname(), passenger.getBirthDate(), passenger.calculateAge(), passenger.generateFullPhone(), passenger.getCountry(), passenger.getNumFlights()});
@@ -1848,13 +1858,13 @@ public class AirportFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
     private javax.swing.JTable jTable4;
     private javax.swing.JTable jTable5;
     private airport.view.PanelRound panelRound1;
     private airport.view.PanelRound panelRound2;
     private airport.view.PanelRound panelRound3;
+    private javax.swing.JTable refreshpas;
     private javax.swing.JRadioButton user;
     private javax.swing.JComboBox<String> userSelect;
     // End of variables declaration//GEN-END:variables
