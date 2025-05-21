@@ -1,18 +1,18 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package airport.models;
-
-import java.io.File;
-import  com.fasterxml.jackson.databind.ObjectMapper;
-import java.awt.List;
-import java.util.Map;
-public class Json{
-
-    
-    
-    ObjectMapper mapper = new ObjectMapper();
+///*
+// * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+// * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+// */
+//package airport.models;
+//
+//import java.io.File;
+//import  com.fasterxml.jackson.databind.ObjectMapper;
+//import java.awt.List;
+//import java.util.Map;
+//public class Json{
+//
+//    
+//    
+//    ObjectMapper mapper = new ObjectMapper();
 //    File file = new File("passengers.json");
 //    
 //    List<Map<String, Object>> lista = mapper.readValue(file, List.class);
@@ -39,4 +39,4 @@ public class Json{
 //
 //        return list;
 //    }
-}
+//}

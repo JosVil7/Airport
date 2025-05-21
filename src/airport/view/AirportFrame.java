@@ -1466,7 +1466,6 @@ public class AirportFrame extends javax.swing.JFrame {
         
         Responses response = PassengerController.createPassenger(id, firstname, lastname, birthDate, phoneCode, phone, country);
         
-//        Response response = PersonController.createPerson(id, firstname, lastname, age, gender);
         
         if (response.getStatus() >= 500) {
             JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
