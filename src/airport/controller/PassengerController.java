@@ -45,12 +45,13 @@ public class PassengerController {
             return new Responses("Country must not be empty", Status.BAD_REQUEST);
         }
 
-        // Parseos (ahora seguros)
+        
         int id = Integer.parseInt(idp);
         if (id < 0) {
             return new Responses("Id must be positive", Status.BAD_REQUEST);
         }
-
+        
+        //Variables agregadas para evitar conflicto de los tipos de variables
         int yearr = Integer.parseInt(year);
         int monthr = Integer.parseInt(month);
         int dayr = Integer.parseInt(day);
@@ -58,7 +59,7 @@ public class PassengerController {
         long phonep = Long.parseLong(phone);
         int PhoneCode = Integer.parseInt(phoneCode);
 
-        // Validar fecha
+        
         LocalDate birthDate;
         try {
             birthDate = LocalDate.of(yearr, monthr, dayr);
@@ -72,11 +73,11 @@ public class PassengerController {
         }
 
         // Validar longitudes
-        if (phoneCode.length() > 3) {
+        if (phoneCode.length() > 3 || phone.length()<0) {
             return new Responses("Phone code must be max 3 digits", Status.BAD_REQUEST);
         }
 
-        if (phone.length() > 11) {
+        if (phone.length() > 11 || phone.length()<0) {
             return new Responses("Phone must be max 11 digits", Status.BAD_REQUEST);
         }
 
@@ -92,7 +93,9 @@ public class PassengerController {
         if (!added) {
             return new Responses("Passenger with this ID already exists", Status.BAD_REQUEST);
         }
-
+        
+        
+        
         return new Responses("Person created successfully", Status.CREATED);
 
     } catch (NumberFormatException ex) {

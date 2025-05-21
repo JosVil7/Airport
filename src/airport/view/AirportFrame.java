@@ -1424,7 +1424,7 @@ public class AirportFrame extends javax.swing.JFrame {
 
         }
         for (int i = 1; i < jTabbedPane1.getTabCount(); i++) {
-                jTabbedPane1.setEnabledAt(i, true);
+            jTabbedPane1.setEnabledAt(i, true);
         }
         jTabbedPane1.setEnabledAt(5, false);
         jTabbedPane1.setEnabledAt(6, false);
@@ -1458,22 +1458,9 @@ public class AirportFrame extends javax.swing.JFrame {
         String phoneCode = Pre.getText();
         String phone = Number.getText();
         String country = Country.getText();
-        
-        int ide = Integer.parseInt(id);
-        int phonecod = Integer.parseInt(phoneCode);
-        int phonee = Integer.parseInt(phone);
-        int yeare = Integer.parseInt(year);
-        int monthe = Integer.parseInt(month);
-        int daye = Integer.parseInt(day);
-        
-        LocalDate birthDate = LocalDate.of(yeare, monthe, daye);
 
-        this.passengers.add(new Passenger(ide, firstname, lastname, birthDate, phonecod, phonee, country));
-        this.userSelect.addItem("" + id);
-        
         Responses response = PassengerController.createPassenger(id, firstname, lastname, year, month, day, phoneCode, phone, country);
-        
-        
+
         if (response.getStatus() >= 500) {
             JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
         } else if (response.getStatus() >= 400) {
@@ -1481,6 +1468,28 @@ public class AirportFrame extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(null, response.getMessage(), "Response Message", JOptionPane.INFORMATION_MESSAGE);
             
+            IDpass.setText("");
+            FirstName.setText("");
+            LastName.setText("");
+            Year.setText("");
+            Pre.setText("");
+            Number.setText("");
+            Country.setText("");
+            MONTH.setSelectedIndex(0);
+            DAY.setSelectedIndex(0);
+            
+            int ide = Integer.parseInt(id);
+            int phonecod = Integer.parseInt(phoneCode);
+            int phonee = Integer.parseInt(phone);
+            int yeare = Integer.parseInt(year);
+            int monthe = Integer.parseInt(month);
+            int daye = Integer.parseInt(day);
+
+            LocalDate birthDate = LocalDate.of(yeare, monthe, daye);
+
+            this.passengers.add(new Passenger(ide, firstname, lastname, birthDate, phonecod, phonee, country));
+            this.userSelect.addItem("" + id);
+
             IDpass.setText("");
             FirstName.setText("");
             LastName.setText("");
@@ -1502,7 +1511,6 @@ public class AirportFrame extends javax.swing.JFrame {
         int maxCapacity = Integer.parseInt(MaxCapacity.getText());
         String airline = Airline.getText();
 
-       
         this.planes.add(new Plane(id, brand, model, maxCapacity, airline));
 
         this.Plane.addItem(id);
@@ -1705,11 +1713,10 @@ public class AirportFrame extends javax.swing.JFrame {
     private void userSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userSelectActionPerformed
         try {
             String id = userSelect.getSelectedItem().toString();
-            if (! id.equals(userSelect.getItemAt(0))) {
+            if (!id.equals(userSelect.getItemAt(0))) {
                 IDpassU.setText(id);
                 IDairF.setText(id);
-            }
-            else{
+            } else {
                 IDpassU.setText("");
                 IDairF.setText("");
             }
@@ -1725,7 +1732,6 @@ public class AirportFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_CountryActionPerformed
 
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddFlight;
