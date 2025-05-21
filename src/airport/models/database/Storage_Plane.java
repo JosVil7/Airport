@@ -4,14 +4,17 @@
  */
 package airport.models.database;
 
+
 import airport.models.Plane;
 import java.util.ArrayList;
+
 
 /**
  *
  * @author USER
  */
 public class Storage_Plane {
+
     public static Storage_Plane instance;
     private ArrayList<Plane> planes;
     private Storage_Plane() {
@@ -53,4 +56,5 @@ public class Storage_Plane {
         }
         return false;
     }
+
 }

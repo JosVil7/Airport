@@ -18,12 +18,14 @@ public class Storage_Location {
         this.locations = new ArrayList<>();
     }
     
+
     public static Storage_Location getInstance(){
         if (instance == null) {
             instance = new Storage_Location();
         }
         return instance;
-    }
+
+  
     public boolean addLocation(Location location){
         for (Location l : this.locations) {
             if (l.getAirportId()== location.getAirportId()) {

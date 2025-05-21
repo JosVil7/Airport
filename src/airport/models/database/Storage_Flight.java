@@ -5,6 +5,11 @@
 package airport.models.database;
 
 import airport.models.Flight;
+
+import airport.models.Location;
+import airport.models.Passenger;
+import airport.models.Plane;
+
 import java.util.ArrayList;
 
 /**
@@ -19,12 +24,15 @@ public class Storage_Flight {
         this.flights = new ArrayList<>();
     }
     
+
     public static Storage_Flight getInstance(){
-        if (instance == null) {
+         if (instance == null) {
             instance = new Storage_Flight();
         }
         return instance;
     }
+
+       
     
     public boolean addFlight(Flight flight){
         for (Flight f : this.flights) {

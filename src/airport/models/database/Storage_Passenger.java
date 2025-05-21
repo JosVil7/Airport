@@ -18,12 +18,14 @@ public class Storage_Passenger {
         this.passengers = new ArrayList<>();
     }
     
+
     public static Storage_Passenger getInstance(){
         if (instance == null) {
             instance = new Storage_Passenger();
         }
         return instance;
     }
+
     
     public boolean addPassenger(Passenger passenger){
         for (Passenger p : this.passengers) {
@@ -44,6 +46,7 @@ public class Storage_Passenger {
         return null;
     }
     
+
     // quitar
     
 //    public boolean delPassenger(long id){
@@ -55,4 +58,5 @@ public class Storage_Passenger {
 //        }
 //        return false;
 //    }
+
 }
