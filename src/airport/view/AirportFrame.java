@@ -1449,22 +1449,20 @@ public class AirportFrame extends javax.swing.JFrame {
 
     private void RegisterPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegisterPassActionPerformed
         // TODO add your handling code here:
-        long id = Long.parseLong(IDpass.getText());
+        String id = IDpass.getText();
         String firstname = FirstName.getText();
         String lastname = LastName.getText();
-        int year = Integer.parseInt(Year.getText());
-        int month = Integer.parseInt(MONTH.getItemAt(MONTH.getSelectedIndex()));
-        int day = Integer.parseInt(DAY.getItemAt(DAY.getSelectedIndex()));
-        int phoneCode = Integer.parseInt(Pre.getText());
-        long phone = Long.parseLong(Number.getText());
+        String year = Year.getText();
+        String month = MONTH.getItemAt(MONTH.getSelectedIndex());
+        String day = (DAY.getItemAt(DAY.getSelectedIndex()));
+        String phoneCode = Pre.getText();
+        String phone = Number.getText();
         String country = Country.getText();
 
-        LocalDate birthDate = LocalDate.of(year, month, day);
-
-        this.passengers.add(new Passenger(id, firstname, lastname, birthDate, phoneCode, phone, country));
+        
         this.userSelect.addItem("" + id);
         
-        Responses response = PassengerController.createPassenger(id, firstname, lastname, birthDate, phoneCode, phone, country);
+        Responses response = PassengerController.createPassenger(id, firstname, lastname, year, month, day, phoneCode, phone, country);
         
         
         if (response.getStatus() >= 500) {
