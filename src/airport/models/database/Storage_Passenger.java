@@ -5,7 +5,10 @@
 package airport.models.database;
 
 import airport.models.Passenger;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -44,6 +47,22 @@ public class Storage_Passenger {
             }
         }
         return null;
+    }
+    
+    public void cargarJSON(JSONArray array){
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject objecto = array.getJSONObject(i);
+            final long id = objecto.getLong("id");
+            String firstname = objecto.getString("firstname");
+            String lastname = objecto.getString("lastname");
+            String birthDatestr = objecto.getString("birthDate");
+            LocalDate birthDate = LocalDate.parse(birthDatestr);
+            int countryPhoneCode = objecto.getInt("countryPhoneCode");
+            long phone = objecto.getLong("phone");
+            String country = objecto.getString("country");
+            
+            Passenger passenger = new Passenger(id, firstname, lastname, birthDate, countryPhoneCode, phone, country);
+        }
     }
     
 

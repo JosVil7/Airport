@@ -6,6 +6,8 @@ package airport.models.database;
 
 import airport.models.Location;
 import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -52,5 +54,19 @@ public class Storage_Location {
             }
         }
         return false;
+    }
+    
+    public void cargarJSON(JSONArray array){
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject objecto = array.getJSONObject(i);
+            final String airportId = objecto.getString("airportId");
+            String airportName = objecto.getString("airportName");
+            String airportCity = objecto.getString("airportCity");
+            String airportCountry = objecto.getString("airportCountry");
+            double airportLatitude = objecto.getDouble("airportLatitude");
+            double airportLongitude = objecto.getDouble("airportLongitude");
+            
+            Location location = new Location(airportId, airportName, airportCity, airportCountry, airportLatitude, airportLongitude);
+        }
     }
 }

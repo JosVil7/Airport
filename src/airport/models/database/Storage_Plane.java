@@ -7,6 +7,8 @@ package airport.models.database;
 
 import airport.models.Plane;
 import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 
 /**
@@ -56,5 +58,18 @@ public class Storage_Plane {
         }
         return false;
     }
-
+    
+    public void cargarJSON(JSONArray array){
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject objecto = array.getJSONObject(i);
+            final String id = objecto.getString("id");
+            String brand = objecto.getString("brand");
+            String model = objecto.getString("model");
+            final int maxCapacity = objecto.getInt("maxCapacity");
+            String airline = objecto.getString("airline");
+            
+            Plane plane = new Plane(id, brand, model, maxCapacity, airline);
+            this.addPlane(plane);
+        }
+    }
 }

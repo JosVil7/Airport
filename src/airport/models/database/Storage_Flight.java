@@ -5,12 +5,12 @@
 package airport.models.database;
 
 import airport.models.Flight;
-
-import airport.models.Location;
-import airport.models.Passenger;
 import airport.models.Plane;
 
+
 import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -60,6 +60,17 @@ public class Storage_Flight {
             }
         }
         return false;
+    }
+    
+    public void cargarJSON(JSONArray array){
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject objecto = array.getJSONObject(i);
+            final String id = objecto.getString("id");
+            String plane = objecto.getString("plane");
+            //problemita con getplane
+            Plane plane_real = Storage_Plane.getInstance().getPlane(plane);
+            
+        }
     }
     
 }
