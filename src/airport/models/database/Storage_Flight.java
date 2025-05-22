@@ -36,7 +36,7 @@ public class Storage_Flight {
     
     public boolean addFlight(Flight flight){
         for (Flight f : this.flights) {
-            if (f.getId() == flight.getId()) {
+            if (f.getId().equals(flight.getId())) {
                 return false;
             }
         }
@@ -45,7 +45,7 @@ public class Storage_Flight {
     }
     public Flight getFlight(String id){
         for (Flight flight : this.flights) {
-            if (flight.getId() == id) {
+            if (flight.getId().equals(id)) {
                 return flight;
             }
         }
@@ -54,7 +54,7 @@ public class Storage_Flight {
     
     public boolean delFlight(String id){
         for (Flight flight : this.flights) {
-            if (flight.getId() == id) {
+            if (flight.getId().equals(id)) {
                 this.flights.remove(flight);
                 return true;
             }

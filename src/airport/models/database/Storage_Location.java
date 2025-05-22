@@ -29,7 +29,7 @@ public class Storage_Location {
     }
     public boolean addLocation(Location location){
         for (Location l : this.locations) {
-            if (l.getAirportId()== location.getAirportId()) {
+            if (l.getAirportId().equals(location.getAirportId())) {
                 return false;
             }
         }
@@ -38,7 +38,7 @@ public class Storage_Location {
     }
     public Location getLocation(String A_id){
         for (Location location : this.locations) {
-            if (location.getAirportId()== A_id) {
+            if (location.getAirportId().equals(A_id)) {
                 return location;
             }
         }
@@ -46,7 +46,7 @@ public class Storage_Location {
     }
     public boolean delLocation(String A_id){
         for (Location location : this.locations) {
-            if (location.getAirportId()== A_id) {
+            if (location.getAirportId().equals(A_id)) {
                 this.locations.remove(location);
                 return true;
             }
