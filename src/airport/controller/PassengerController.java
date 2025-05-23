@@ -97,7 +97,7 @@ public class PassengerController {
         
         
         
-        return new Responses("Passenger have been created successfully", Status.CREATED);
+        return new Responses("Passenger has been created successfully", Status.CREATED);
 
     } catch (NumberFormatException ex) {
         return new Responses("Numeric fields must be valid numbers", Status.BAD_REQUEST);

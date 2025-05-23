@@ -78,7 +78,7 @@ public class PlaneController {
                 return new Responses("Plane with this ID already exists", Status.BAD_REQUEST);
             }
 
-            return new Responses("Plane created successfully", Status.CREATED);
+            return new Responses("Plane has been created successfully", Status.CREATED);
         } catch (Exception ex) {
             return new Responses("Unexpected error", Status.INTERNAL_SERVER_ERROR);
         }
