@@ -1439,7 +1439,7 @@ public class AirportFrame extends javax.swing.JFrame {
         }
         for (int i = 1; i < jTabbedPane1.getTabCount(); i++) {
 
-            jTabbedPane1.setEnabledAt(i, false);
+            jTabbedPane1.setEnabledAt(i, false); // false
 
         }
         jTabbedPane1.setEnabledAt(9, true);
@@ -1482,7 +1482,7 @@ public class AirportFrame extends javax.swing.JFrame {
 
             int ide = Integer.parseInt(id);
             int phonecod = Integer.parseInt(phoneCode);
-            int phonee = Integer.parseInt(phone);
+            long phonee = Long.parseLong(phone);
             int yeare = Integer.parseInt(year);
             int monthe = Integer.parseInt(month);
             int daye = Integer.parseInt(day);
@@ -1624,31 +1624,113 @@ public class AirportFrame extends javax.swing.JFrame {
 
     private void UpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateActionPerformed
         // TODO add your handling code here:
-        long id = Long.parseLong(IDpassU.getText());
+        String id = IDpassU.getText();
         String firstname = FirstNameU.getText();
         String lastname = LastNameU.getText();
-        int year = Integer.parseInt(YearU.getText());
-        int month = Integer.parseInt(MONTH.getItemAt(MONTH5.getSelectedIndex()));
-        int day = Integer.parseInt(DAY.getItemAt(DAY5.getSelectedIndex()));
-        int phoneCode = Integer.parseInt(PreU.getText());
-        long phone = Long.parseLong(NumberU.getText());
+        String year = YearU.getText();
+        String month = MONTH.getItemAt(MONTH5.getSelectedIndex());
+        String day = DAY.getItemAt(DAY5.getSelectedIndex());
+        String phoneCode = PreU.getText();
+        String phone = NumberU.getText();
         String country = CountryU.getText();
 
-        LocalDate birthDate = LocalDate.of(year, month, day);
+        Responses response = PassengerController.updatePassenger(id, firstname, lastname, year, month, day, phoneCode, phone, country);
 
-        Passenger passenger = null;
-        for (Passenger p : this.passengers) {
-            if (p.getId() == id) {
-                passenger = p;
+        if (response.getStatus() >= 500) {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
+        } else if (response.getStatus() >= 400) {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Response Message", JOptionPane.INFORMATION_MESSAGE);
+
+            long idup = Long.parseLong(id);
+            int yearup = Integer.parseInt(year);
+            int monthup = Integer.parseInt(MONTH.getItemAt(MONTH5.getSelectedIndex()));
+            int dayup = Integer.parseInt(DAY.getItemAt(DAY5.getSelectedIndex()));
+            int phoneCodeup = Integer.parseInt(phoneCode);
+            long phoneup = Long.parseLong(phone);
+
+            LocalDate birthDate = LocalDate.of(yearup, monthup, dayup);
+            Passenger passenger = null;
+            for (Passenger p : this.passengers) {
+                if (p.getId() == idup) {
+                    passenger = p;
+                }
             }
+
+            passenger.setFirstname(firstname);
+            passenger.setLastname(lastname);
+            passenger.setBirthDate(birthDate);
+            passenger.setCountryPhoneCode(phoneCodeup);
+            passenger.setPhone(phoneup);
+            passenger.setCountry(country);
+            
+            
+            //cambiar si pasa algo
+            IDpassU.setText("");
+            FirstNameU.setText("");
+            LastNameU.setText("");
+            YearU.setText("");
+            MONTH5.setSelectedIndex(0);
+            DAY5.setSelectedIndex(0);
+            PreU.setText("");
+            NumberU.setText("");
+            CountryU.setText("");
         }
 
-        passenger.setFirstname(firstname);
-        passenger.setLastname(lastname);
-        passenger.setBirthDate(birthDate);
-        passenger.setCountryPhoneCode(phoneCode);
-        passenger.setPhone(phone);
-        passenger.setCountry(country);
+//        // TODO add your handling code here:
+//        String id = IDpass.getText();
+//        String firstname = FirstName.getText();
+//        String lastname = LastName.getText();
+//        String year = Year.getText();
+//        String month = MONTH.getItemAt(MONTH.getSelectedIndex());
+//        String day = (DAY.getItemAt(DAY.getSelectedIndex()));
+//        String phoneCode = Pre.getText();
+//        String phone = Number.getText();
+//        String country = Country.getText();
+//
+//        Responses response = PassengerController.createPassenger(id, firstname, lastname, year, month, day, phoneCode, phone, country);
+//
+//        if (response.getStatus() >= 500) {
+//            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
+//        } else if (response.getStatus() >= 400) {
+//            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
+//        } else {
+//            JOptionPane.showMessageDialog(null, response.getMessage(), "Response Message", JOptionPane.INFORMATION_MESSAGE);
+//
+//            IDpass.setText("");
+//            FirstName.setText("");
+//            LastName.setText("");
+//            Year.setText("");
+//            Pre.setText("");
+//            Number.setText("");
+//            Country.setText("");
+//            MONTH.setSelectedIndex(0);
+//            DAY.setSelectedIndex(0);
+//
+//            int ide = Integer.parseInt(id);
+//            int phonecod = Integer.parseInt(phoneCode);
+//            int phonee = Integer.parseInt(phone);
+//            int yeare = Integer.parseInt(year);
+//            int monthe = Integer.parseInt(month);
+//            int daye = Integer.parseInt(day);
+//
+//            LocalDate birthDate = LocalDate.of(yeare, monthe, daye);
+//
+//            this.passengers.add(new Passenger(ide, firstname, lastname, birthDate, phonecod, phonee, country));
+//            this.userSelect.addItem("" + id);
+//
+//            IDpass.setText("");
+//            FirstName.setText("");
+//            LastName.setText("");
+//            Year.setText("");
+//            Pre.setText("");
+//            Number.setText("");
+//            Country.setText("");
+//            MONTH.setSelectedIndex(0);
+//            DAY.setSelectedIndex(0);
+//        }
+
     }//GEN-LAST:event_UpdateActionPerformed
 
     private void AddFlightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddFlightActionPerformed
