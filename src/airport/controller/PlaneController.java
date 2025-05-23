@@ -14,7 +14,8 @@ import airport.models.database.Storage_Plane;
  * @author Jose
  */
 public class PlaneController {
-    public static Responses createPlane(String id, String brand, String model, int maxCapacity, String airline) {
+
+    public static Responses createPlane(String id, String brand, String model, String maxCapacity, String airline) {
         try {
 
             try {
@@ -22,10 +23,10 @@ public class PlaneController {
                     return new Responses("Id debe tener exactamente 7 caracteres (2 letras mayúsculas y 5 dígitos)", Status.BAD_REQUEST);
                 }
 
-                // Convertimos el string en arreglo de caracteres
+                // Convertimos el string en arreglo de caracteres para ir tomando el id caracter por caracter y encontrar posible infracciones
                 String[] chars = id.split("");
 
-                // Validar las dos primeras letras mayúsculas
+                // Validar las dos primeras letras son mayúsculas
                 for (int i = 0; i < 2; i++) {
                     if (!chars[i].matches("[A-Z]")) {
                         return new Responses("Los primeros dos caracteres deben ser letras mayúsculas", Status.BAD_REQUEST);
@@ -48,7 +49,7 @@ public class PlaneController {
                 return new Responses("Plane with this ID already exists", Status.BAD_REQUEST);
             }
 
-            if (brand == null) {
+            if (brand == null || brand.trim().isEmpty()) {
                 return new Responses("Brand must be not empty", Status.BAD_REQUEST);
             }
 
@@ -56,15 +57,22 @@ public class PlaneController {
                 return new Responses("Model must be not empty", Status.BAD_REQUEST);
             }
 
-            if (maxCapacity < 0) {
+            if (maxCapacity == "" || maxCapacity == null) {
                 return new Responses("Max capacity must be not empty.", Status.BAD_REQUEST);
             }
 
-            if (airline == null) {
+            if (!maxCapacity.matches("\\d+")) {
+                return new Responses("Max capacity must contain only digits.", Status.BAD_REQUEST);
+            }
+
+            if (airline == null || airline.trim().isEmpty()) {
                 return new Responses("Airline must be not empty", Status.BAD_REQUEST);
             }
 
-            Plane plane = new Plane(id, brand, model, maxCapacity, airline);
+            int max = Integer.parseInt(maxCapacity);
+
+            Plane plane = new Plane(id, brand, model, max, airline);
+
             boolean added = storage.addPlane(plane);
             if (!added) {
                 return new Responses("Plane with this ID already exists", Status.BAD_REQUEST);

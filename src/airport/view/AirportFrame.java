@@ -6,6 +6,7 @@ package airport.view;
 
 import airport.controller.FlightController;
 import airport.controller.PassengerController;
+import airport.controller.PlaneController;
 import airport.controller.utils.Responses;
 import airport.models.Flight;
 import airport.models.Location;
@@ -1508,12 +1509,32 @@ public class AirportFrame extends javax.swing.JFrame {
         String id = IDair.getText();
         String brand = Brand.getText();
         String model = Model.getText();
-        int maxCapacity = Integer.parseInt(MaxCapacity.getText());
+        String maxCapacity = MaxCapacity.getText();
         String airline = Airline.getText();
 
-        this.planes.add(new Plane(id, brand, model, maxCapacity, airline));
+        
 
         this.Plane.addItem(id);
+        
+        
+        Responses response = PlaneController.createPlane(id, brand, model, maxCapacity, airline);
+
+        if (response.getStatus() >= 500) {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
+        } else if (response.getStatus() >= 400) {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Response Message", JOptionPane.INFORMATION_MESSAGE);
+            
+            int max = Integer.parseInt(maxCapacity);
+            this.planes.add(new Plane(id, brand, model, max, airline));
+            
+            IDair.setText("");
+            Brand.setText("");
+            Model.setText("");
+            MaxCapacity.setText("");
+            Airline.setText("");
+        }
     }//GEN-LAST:event_CreateAirActionPerformed
 
     private void CreateLocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateLocActionPerformed

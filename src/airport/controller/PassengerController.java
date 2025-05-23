@@ -20,7 +20,8 @@ public class PassengerController {
 
         public static Responses createPassenger(String idp, String firstname, String lastname, String year, String month, String day, String phoneCode, String phone, String country) {
     try {
-        // Validación básica de campos vacíos
+        
+        // Validamos por si lo campos estan vacios o no
         if (idp == null || idp.trim().isEmpty()) {
             return new Responses("Id must not be empty", Status.BAD_REQUEST);
         }
@@ -51,7 +52,7 @@ public class PassengerController {
             return new Responses("Id must be positive", Status.BAD_REQUEST);
         }
         
-        //Variables agregadas para evitar conflicto de los tipos de variables
+        //Variables agregadas para evitar conflicto de los tipos de variables (Para entregarlas sin cambiar el constructor y eso)
         int yearr = Integer.parseInt(year);
         int monthr = Integer.parseInt(month);
         int dayr = Integer.parseInt(day);
@@ -72,7 +73,7 @@ public class PassengerController {
             return new Responses("Birthdate must be between 1900 and today", Status.BAD_REQUEST);
         }
 
-        // Validar longitudes
+        // Validar cantidad de numero mediante longitud 
         if (phoneCode.length() > 3 || phone.length()<0) {
             return new Responses("Phone code must be max 3 digits", Status.BAD_REQUEST);
         }
@@ -81,13 +82,13 @@ public class PassengerController {
             return new Responses("Phone must be max 11 digits", Status.BAD_REQUEST);
         }
 
-        // Comprobar si el pasajero ya existe
+        // Comprobar si el pasajero ya existe en el programa
         Storage_Passenger storage = Storage_Passenger.getInstance();
         if (storage.getPassenger(id) != null) {
             return new Responses("Passenger with this ID already exists", Status.BAD_REQUEST);
         }
 
-        // Crear pasajero
+        // Crear al nuevo pasajero
         Passenger passenger = new Passenger(idpp, firstname, lastname, birthDate, PhoneCode, phonep, country);
         boolean added = storage.addPassenger(passenger);
         if (!added) {
@@ -96,7 +97,7 @@ public class PassengerController {
         
         
         
-        return new Responses("Person created successfully", Status.CREATED);
+        return new Responses("Passenger have been created successfully", Status.CREATED);
 
     } catch (NumberFormatException ex) {
         return new Responses("Numeric fields must be valid numbers", Status.BAD_REQUEST);
