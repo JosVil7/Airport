@@ -18,29 +18,8 @@ public class PlaneController {
     public static Responses createPlane(String id, String brand, String model, String maxCapacity, String airline) {
         try {
 
-            try {
-                if (id == null || id.length() != 7) {
-                    return new Responses("Id debe tener exactamente 7 caracteres (2 letras mayúsculas y 5 dígitos)", Status.BAD_REQUEST);
-                }
-
-                // Convertimos el string en arreglo de caracteres para ir tomando el id caracter por caracter y encontrar posible infracciones
-                String[] chars = id.split("");
-
-                // Validar las dos primeras letras son mayúsculas
-                for (int i = 0; i < 2; i++) {
-                    if (!chars[i].matches("[A-Z]")) {
-                        return new Responses("Los primeros dos caracteres deben ser letras mayúsculas", Status.BAD_REQUEST);
-                    }
-                }
-
-                // Validar los últimos cinco dígitos numéricos
-                for (int i = 2; i < 7; i++) {
-                    if (!chars[i].matches("[0-9]")) {
-                        return new Responses("Los últimos cinco caracteres deben ser dígitos numéricos", Status.BAD_REQUEST);
-                    }
-                }
-            } catch (NumberFormatException ex) {
-                return new Responses("Id must be numeric", Status.BAD_REQUEST);
+            if (id == null || !id.matches("^[A-Z]{2}\\d{5}$")) {
+                return new Responses("ID must have exactly 2 uppercase letters followed by 5 digits", Status.BAD_REQUEST);
             }
 
             Storage_Plane storage = Storage_Plane.getInstance();
@@ -57,7 +36,7 @@ public class PlaneController {
                 return new Responses("Model must be not empty", Status.BAD_REQUEST);
             }
 
-            if (maxCapacity == "" || maxCapacity == null) {
+            if(maxCapacity == null || maxCapacity.trim().isEmpty()){
                 return new Responses("Max capacity must be not empty.", Status.BAD_REQUEST);
             }
 

@@ -1579,47 +1579,67 @@ public class AirportFrame extends javax.swing.JFrame {
         String departureLocationId = DeparLoc.getItemAt(DeparLoc.getSelectedIndex());
         String arrivalLocationId = ArrivLoc.getItemAt(ArrivLoc.getSelectedIndex());
         String scaleLocationId = ScalLoc.getItemAt(ScalLoc.getSelectedIndex());
-        int year = Integer.parseInt(YearFlight.getText());
-        int month = Integer.parseInt(MONTH1.getItemAt(MONTH1.getSelectedIndex()));
-        int day = Integer.parseInt(DAY1.getItemAt(DAY1.getSelectedIndex()));
-        int hour = Integer.parseInt(MONTH2.getItemAt(MONTH2.getSelectedIndex()));
-        int minutes = Integer.parseInt(DAY2.getItemAt(DAY2.getSelectedIndex()));
-        int hoursDurationsArrival = Integer.parseInt(MONTH3.getItemAt(MONTH3.getSelectedIndex()));
-        int minutesDurationsArrival = Integer.parseInt(DAY3.getItemAt(DAY3.getSelectedIndex()));
-        int hoursDurationsScale = Integer.parseInt(MONTH4.getItemAt(MONTH4.getSelectedIndex()));
-        int minutesDurationsScale = Integer.parseInt(DAY4.getItemAt(DAY4.getSelectedIndex()));
+        String year = YearFlight.getText();
+        String month = MONTH1.getItemAt(MONTH1.getSelectedIndex());
+        String day = DAY1.getItemAt(DAY1.getSelectedIndex());
+        String hour = MONTH2.getItemAt(MONTH2.getSelectedIndex());
+        String minutes = DAY2.getItemAt(DAY2.getSelectedIndex());
+        String hoursDurationsArrival = MONTH3.getItemAt(MONTH3.getSelectedIndex());
+        String minutesDurationsArrival = DAY3.getItemAt(DAY3.getSelectedIndex());
+        String hoursDurationsScale = MONTH4.getItemAt(MONTH4.getSelectedIndex());
+        String minutesDurationsScale = DAY4.getItemAt(DAY4.getSelectedIndex());
 
-        LocalDateTime departureDate = LocalDateTime.of(year, month, day, hour, minutes);
+        Responses response = FlightController.createFlight(id, planeId, departureLocationId, arrivalLocationId, scaleLocationId, year, month, day, hour, minutes, hoursDurationsArrival, minutesDurationsArrival, hoursDurationsScale, minutesDurationsScale);
 
-        Plane plane = null;
-        for (Plane p : this.planes) {
-            if (planeId.equals(p.getId())) {
-                plane = p;
-            }
-        }
-
-        Location departure = null;
-        Location arrival = null;
-        Location scale = null;
-        for (Location location : this.locations) {
-            if (departureLocationId.equals(location.getAirportId())) {
-                departure = location;
-            }
-            if (arrivalLocationId.equals(location.getAirportId())) {
-                arrival = location;
-            }
-            if (scaleLocationId.equals(location.getAirportId())) {
-                scale = location;
-            }
-        }
-
-        if (scale == null) {
-            this.flights.add(new Flight(id, plane, departure, arrival, departureDate, hoursDurationsArrival, minutesDurationsArrival));
+        if (response.getStatus() >= 500) {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
+        } else if (response.getStatus() >= 400) {
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
         } else {
-            this.flights.add(new Flight(id, plane, departure, scale, arrival, departureDate, hoursDurationsArrival, minutesDurationsArrival, hoursDurationsScale, minutesDurationsScale));
-        }
+            JOptionPane.showMessageDialog(null, response.getMessage(), "Response Message", JOptionPane.INFORMATION_MESSAGE);
 
-        this.Flight.addItem(id);
+            int yeari = Integer.parseInt(year);
+            int monthi = Integer.parseInt(month);
+            int dayi = Integer.parseInt(day);
+            int houri = Integer.parseInt(hour);
+            int minutesi = Integer.parseInt(minutes);
+            int hoursDurationsArrivali = Integer.parseInt(hoursDurationsArrival);
+            int minutesDurationsArrivali = Integer.parseInt(minutesDurationsArrival);
+            int hoursDurationsScalei = Integer.parseInt(hoursDurationsScale);
+            int minutesDurationsScalei = Integer.parseInt(minutesDurationsScale);
+            
+            LocalDateTime departureDate = LocalDateTime.of(yeari, monthi, dayi, houri, minutesi);
+
+            Plane plane = null;
+            for (Plane p : this.planes) {
+                if (planeId.equals(p.getId())) {
+                    plane = p;
+                }
+            }
+
+            Location departure = null;
+            Location arrival = null;
+            Location scale = null;
+            for (Location location : this.locations) {
+                if (departureLocationId.equals(location.getAirportId())) {
+                    departure = location;
+                }
+                if (arrivalLocationId.equals(location.getAirportId())) {
+                    arrival = location;
+                }
+                if (scaleLocationId.equals(location.getAirportId())) {
+                    scale = location;
+                }
+            }
+
+            if (scale == null) {
+                this.flights.add(new Flight(id, plane, departure, arrival, departureDate, hoursDurationsArrivali, minutesDurationsArrivali));
+            } else {
+                this.flights.add(new Flight(id, plane, departure, scale, arrival, departureDate, hoursDurationsArrivali, minutesDurationsArrivali, hoursDurationsScalei, minutesDurationsScalei));
+            }
+
+            this.Flight.addItem(id);
+        }
     }//GEN-LAST:event_CreaterFlightResActionPerformed
 
     private void UpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateActionPerformed
@@ -1664,8 +1684,7 @@ public class AirportFrame extends javax.swing.JFrame {
             passenger.setCountryPhoneCode(phoneCodeup);
             passenger.setPhone(phoneup);
             passenger.setCountry(country);
-            
-            
+
             //cambiar si pasa algo
             IDpassU.setText("");
             FirstNameU.setText("");

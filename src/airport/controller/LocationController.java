@@ -18,28 +18,13 @@ public class LocationController {
     public static Responses createLocation(String id, String name, String city, String country, String latitude, String longitude) {
         try {
 
-            try {
-                if (id == null || id.length() != 3) {
-                    return new Responses("Id debe tener exactamente 3 letras en mayusculas", Status.BAD_REQUEST);
-                }
-
-                // Convertimos el string en arreglo de caracteres para ir tomando el id caracter por caracter y encontrar posible infracciones
-                String[] chars = id.split("");
-
-                // Validar las dos primeras letras son mayúsculas
-                for (int i = 0; i < 3; i++) {
-                    if (!chars[i].matches("[A-Z]")) {
-                        return new Responses("Las letras deben estar en mayuscula", Status.BAD_REQUEST);
-                    }
-                }
-
-            } catch (NumberFormatException ex) {
-                return new Responses("Id must be numeric", Status.BAD_REQUEST);
+            if (id == null || !id.matches("^[A-Z]{3}$")) {
+                return new Responses("ID must have exactly 3 uppercase letters.", Status.BAD_REQUEST);
             }
 
             Storage_Location storage = Storage_Location.getInstance();
 
-            if (storage.getLocation(id) != null) {
+            if (storage.getLocation(id) != null) { 
                 return new Responses("Location with this ID already exists", Status.BAD_REQUEST);
             }
 
@@ -63,8 +48,8 @@ public class LocationController {
             latitude = latitude.trim().replace(",", ".");
 
             //Para que recenozca si hay letras, y el - para que el numero sea negativo
-            if (!latitude.matches("-?\\d+(\\.\\d+)?")) {
-                return new Responses("Latitude must be a valid number (e.g., -45.0, 30.5).", Status.BAD_REQUEST);
+            if (!latitude.matches("-?\\d+(\\.\\d{1,4})?")) {
+                return new Responses("Latitude must be a valid number with up to 4 decimal places.", Status.BAD_REQUEST);
             }
 
             double lat = Double.parseDouble(latitude);
@@ -79,8 +64,8 @@ public class LocationController {
 
             longitude = longitude.trim().replace(",", ".");
 
-            if (!longitude.matches("-?\\d+(\\.\\d+)?")) {
-                return new Responses("Longitude must be a valid number (e.g., -45.0, 30.5).", Status.BAD_REQUEST);
+            if (!longitude.matches("-?\\d+(\\.\\d{1,4})?")) {
+                return new Responses("Longitude must be a valid number with up to 4 decimal places.", Status.BAD_REQUEST);
             }
 
             double lon = Double.parseDouble(longitude);
