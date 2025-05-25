@@ -11,20 +11,20 @@ package airport.controller.utils;
 public class Responses {
     
     private String message;
-    private int status;
-    private Object object;
+    private int status; 
+    private Object data; 
 
-    public Responses(String message, int status) {
+    public Responses(String message, Status status) {
         this.message = message;
-        this.status = status;
+        this.status = status.getCode();
+        this.data = null; // No data by default
     }
 
-    public Responses(String message, int status, Object object) {
+    public Responses(String message, Status status, Object data) {
         this.message = message;
-        this.status = status;
-        this.object = object;
+        this.status = status.getCode();
+        this.data = data;
     }
-    
 
     public String getMessage() {
         return message;
@@ -34,8 +34,8 @@ public class Responses {
         return status;
     }
 
-    public Object getObject() {
-        return object;
+    public Object getData() {
+        return data;
     }
     
 }

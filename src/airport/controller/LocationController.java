@@ -14,6 +14,12 @@ import airport.models.database.Storage_Location;
  *
  * @author Jose
  */
+
+/*
+    Con esta forma en la que se organizan los controladores permite la opcion de open source, ya que en esta clase de Controller se podrian agregar nuevas 
+    clases y paquetes para no cambiar el codigo que ya funciona. Ademas no se puede implementar de forma directa todo SOLID por falta de recursos como interfaces
+    para todo tipo
+    */
 public class LocationController {
 
     public static Responses createLocation(String id, String name, String city, String country, String latitude, String longitude) {

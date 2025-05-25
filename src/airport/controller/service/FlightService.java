@@ -84,4 +84,34 @@ public class FlightService {
             return new Responses("Unexpected error occurred", Status.INTERNAL_SERVER_ERROR);
         }
     }
+    
+//      public Responses delayFlight(String Id, String hours, String minutes) { //
+//        try {
+//            String validationError = FlightValidator.delayFlight(Id, hours, minutes);
+//            if (validationError != null) {
+//                return new Responses(validationError, Status.BAD_REQUEST);
+//            }
+//
+//            int hourInt = Integer.parseInt(hours.trim());
+//            int minutesInt = Integer.parseInt(minutes.trim());
+//
+//            Flight flight = flightRepository.getFlight(Id.trim());
+//            if (flight == null) {
+//                return new Responses("Flight with ID hasn't been not found.", Status.NOT_FOUND);
+//            }
+//
+//            flight.delay(hourInt, minutesInt); //
+//
+//            Storage_Flight.updateFlight(flight);
+//
+//            
+//
+//            return new Responses("Flight has been delayed successfully.", Status.OK, flightCopy);
+//
+//        } catch (NumberFormatException e) {
+//            return new Responses("Invalid numeric format for delay hours/minutes.", Status.BAD_REQUEST);
+//        } catch (Exception ex) {
+//            return new Responses("Unexpected error delaying flight: " + ex.getMessage(), Status.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 }

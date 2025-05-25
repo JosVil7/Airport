@@ -6,9 +6,10 @@ package airport.models.database;
 
 import airport.models.Passenger;
 import java.util.List;
-import java.util.ArrayList;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -16,9 +17,9 @@ import org.json.JSONObject;
  *
  * @author USER
  */
-public class Storage_Passenger {
+public class Storage_Passenger implements IPassengerStorage {
 
-    public static Storage_Passenger instance;
+    private static Storage_Passenger instance;
     private ArrayList<Passenger> passengers;
 
     private Storage_Passenger() {
@@ -32,23 +33,48 @@ public class Storage_Passenger {
         return instance;
     }
 
+    @Override
     public boolean addPassenger(Passenger passenger) {
         for (Passenger p : this.passengers) {
             if (p.getId() == passenger.getId()) {
-                return false;
+                return false; 
             }
         }
         this.passengers.add(passenger);
         return true;
     }
 
+    @Override
     public Passenger getPassenger(long id) {
         for (Passenger passenger : this.passengers) {
             if (passenger.getId() == id) {
-                return passenger;
+                return passenger.clone(); 
             }
         }
         return null;
+    }
+
+    @Override
+    public List<Passenger> getAllPassengers() {
+        List<Passenger> sortedPassengers = new ArrayList<>(this.passengers);
+        Collections.sort(sortedPassengers, Comparator.comparingLong(Passenger::getId));
+        
+        List<Passenger> copiedPassengers = new ArrayList<>();
+        for (Passenger p : sortedPassengers) {
+            copiedPassengers.add(p.clone());
+        }
+        return copiedPassengers;
+    }
+
+    @Override
+    public boolean updatePassenger(Passenger updatedPassenger) {
+        for (int i = 0; i < this.passengers.size(); i++) {
+            if (this.passengers.get(i).getId() == updatedPassenger.getId()) {
+                this.passengers.set(i, updatedPassenger);
+                return true;
+            }
+        }
+        return false; 
     }
 
     public void cargarJSON(JSONArray array) {
@@ -63,24 +89,10 @@ public class Storage_Passenger {
             long phone = objecto.getLong("phone");
             String country = objecto.getString("country");
 
-            Passenger passenger = new Passenger(id, firstname, lastname, birthDate, countryPhoneCode, phone, country);
-            this.addPassenger(passenger);
+            if (getPassenger(id) == null) {
+                Passenger passenger = new Passenger(id, firstname, lastname, birthDate, countryPhoneCode, phone, country);
+                this.addPassenger(passenger);
+            }
         }
     }
-    
-    public List<Passenger> getPassengers() {
-        return this.passengers;
-    }
-
-
-// quitar
-//    public boolean delPassenger(long id){
-//        for (Passenger passenger : this.passengers) {
-//            if (passenger.getId() == id) {
-//                this.passengers.remove(passenger);
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
 }
