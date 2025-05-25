@@ -6,6 +6,7 @@ package airport.models.database;
 
 import airport.models.Location;
 import java.util.ArrayList;
+import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -67,6 +68,11 @@ public class Storage_Location {
             double airportLongitude = objecto.getDouble("airportLongitude");
             
             Location location = new Location(airportId, airportName, airportCity, airportCountry, airportLatitude, airportLongitude);
+            this.addLocation(location);
         }
+    }
+    
+    public List<Location> getLocations() {
+        return this.locations;
     }
 }

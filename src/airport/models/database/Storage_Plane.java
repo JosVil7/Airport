@@ -5,8 +5,10 @@
 package airport.models.database;
 
 
+import airport.models.Flight;
 import airport.models.Plane;
 import java.util.ArrayList;
+import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -72,4 +74,10 @@ public class Storage_Plane {
             this.addPlane(plane);
         }
     }
+    
+    public List<Plane> getPlanes() {
+        return this.planes;
+    }
+    
+    
 }

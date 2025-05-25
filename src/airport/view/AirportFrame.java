@@ -14,7 +14,10 @@ import airport.models.Location;
 import airport.models.Passenger;
 import airport.models.Plane;
 import airport.models.database.D_Loader;
+import airport.models.database.Storage_Flight;
+import airport.models.database.Storage_Location;
 import airport.models.database.Storage_Passenger;
+import airport.models.database.Storage_Plane;
 import java.awt.Color;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -1776,27 +1779,34 @@ public class AirportFrame extends javax.swing.JFrame {
 
     private void RefreshAllFlightsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshAllFlightsActionPerformed
         // TODO add your handling code here:
+        D_Loader.load_Flights();
+        
         DefaultTableModel model = (DefaultTableModel) flighttable.getModel();
         model.setRowCount(0);
-        for (Flight flight : this.flights) {
+        for (Flight flight : Storage_Flight.getInstance().getFlightss()){
             model.addRow(new Object[]{flight.getId(), flight.getDepartureLocation().getAirportId(), flight.getArrivalLocation().getAirportId(), (flight.getScaleLocation() == null ? "-" : flight.getScaleLocation().getAirportId()), flight.getDepartureDate(), flight.calculateArrivalDate(), flight.getPlane().getId(), flight.getNumPassengers()});
         }
     }//GEN-LAST:event_RefreshAllFlightsActionPerformed
 
     private void RefreshAllPlanesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshAllPlanesActionPerformed
         // TODO add your handling code here:
+        D_Loader.load_Planes();
+        
         DefaultTableModel model = (DefaultTableModel) jTable4.getModel();
         model.setRowCount(0);
-        for (Plane plane : this.planes) {
+        for (Plane plane : Storage_Plane.getInstance().getPlanes()) {
             model.addRow(new Object[]{plane.getId(), plane.getBrand(), plane.getModel(), plane.getMaxCapacity(), plane.getAirline(), plane.getNumFlights()});
         }
     }//GEN-LAST:event_RefreshAllPlanesActionPerformed
 
     private void RefreshLocationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshLocationsActionPerformed
         // TODO add your handling code here:
+        
+        D_Loader.load_Locations();
+        
         DefaultTableModel model = (DefaultTableModel) locationtable.getModel();
         model.setRowCount(0);
-        for (Location location : this.locations) {
+        for (Location location : Storage_Location.getInstance().getLocations()) {
             model.addRow(new Object[]{location.getAirportId(), location.getAirportName(), location.getAirportCity(), location.getAirportCountry()});
         }
     }//GEN-LAST:event_RefreshLocationsActionPerformed
