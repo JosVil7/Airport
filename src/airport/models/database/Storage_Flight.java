@@ -47,7 +47,7 @@ public class Storage_Flight {
     public Flight getFlight(String id) {
         for (Flight flight : this.flights) {
             if (flight.getId().equals(id)) {
-                return flight;
+                return flight.clone(); 
             }
         }
         return null;
@@ -101,8 +101,11 @@ public class Storage_Flight {
 }
 
 
-    public List<Flight> getFlightss() {
-        return this.flights;
+    public List<Flight> getFlightss() { 
+    ArrayList<Flight> clonedFlights = new ArrayList<>();
+        for (Flight f : this.flights) {
+            clonedFlights.add(f.clone());
+        }
+        return clonedFlights; 
     }
-
 }

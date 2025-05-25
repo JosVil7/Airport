@@ -43,13 +43,13 @@ public class Storage_Plane {
     }
     
     public Plane getPlane(String id){
-        for (Plane plane : this.planes) {
-            if (plane.getId().equals(id)) {
-                return plane;
-            }
+    for (Plane plane : this.planes) {
+        if (plane.getId().equals(id)) {
+            return plane.clone(); 
         }
-        return null;
     }
+    return null;
+}
     
     public boolean delPlane(String id){
         for (Plane plane : this.planes) {
@@ -76,7 +76,11 @@ public class Storage_Plane {
     }
     
     public List<Plane> getPlanes() {
-        return this.planes;
+    ArrayList<Plane> clonedPlanes = new ArrayList<>();
+        for (Plane p : this.planes) {
+        clonedPlanes.add(p.clone());
+        }
+        return clonedPlanes; 
     }
     
     

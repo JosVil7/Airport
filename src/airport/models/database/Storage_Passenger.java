@@ -45,7 +45,7 @@ public class Storage_Passenger {
     public Passenger getPassenger(long id) {
         for (Passenger passenger : this.passengers) {
             if (passenger.getId() == id) {
-                return passenger;
+            return passenger.clone(); 
             }
         }
         return null;
@@ -69,18 +69,10 @@ public class Storage_Passenger {
     }
     
     public List<Passenger> getPassengers() {
-        return this.passengers;
+    ArrayList<Passenger> clonedPassengers = new ArrayList<>();
+        for (Passenger p : this.passengers) {
+            clonedPassengers.add(p.clone());
+        }
+        return clonedPassengers; 
     }
-
-
-// quitar
-//    public boolean delPassenger(long id){
-//        for (Passenger passenger : this.passengers) {
-//            if (passenger.getId() == id) {
-//                this.passengers.remove(passenger);
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
 }
