@@ -50,4 +50,16 @@ public class Location {
         return airportLongitude;
     }
     
+    public Location(Location other) {
+        this.airportId = other.airportId;
+        this.airportName = other.airportName;
+        this.airportCity = other.airportCity;
+        this.airportCountry = other.airportCountry;
+        this.airportLatitude = other.airportLatitude;
+        this.airportLongitude = other.airportLongitude;
+    }
+    
+    public Location clone(){
+        return new Location(this);
+    }
 }

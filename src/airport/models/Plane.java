@@ -60,4 +60,19 @@ public class Plane {
         return flights.size();
     }
     
+    public Plane(Plane other) {
+        this.id = other.id;
+        this.brand = other.brand;
+        this.model = other.model;
+        this.maxCapacity = other.maxCapacity;
+        this.airline = other.airline;
+        this.flights = new ArrayList<>();
+        for (Flight f : other.flights) {
+            this.flights.add(f.clone());
+        }
+    }
+    
+    public Plane clone(){
+        return new Plane(this);
+    }
 }

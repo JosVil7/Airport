@@ -115,4 +115,21 @@ public class Passenger {
         return flights.size();
     }
     
+    public Passenger(Passenger other) {
+        this.id = other.id;
+        this.firstname = other.firstname;
+        this.lastname = other.lastname;
+        this.birthDate = other.birthDate;
+        this.countryPhoneCode = other.countryPhoneCode;
+        this.phone = other.phone;
+        this.country = other.country;
+        this.flights = new ArrayList<>();
+        for (Flight f : other.flights) {
+            this.flights.add(f.clone());
+        }
+    }
+    
+    public Passenger clone(){
+        return new Passenger(this);
+    }
 }
