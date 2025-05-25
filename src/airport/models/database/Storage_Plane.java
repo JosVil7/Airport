@@ -7,6 +7,8 @@ package airport.models.database;
 
 import airport.models.Plane;
 import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 
 /**
@@ -30,7 +32,7 @@ public class Storage_Plane {
     
     public boolean addPlane(Plane plane){
         for (Plane pl : this.planes) {
-            if (pl.getId() == plane.getId()) {
+            if (pl.getId().equals(plane.getId())) {
                 return false;
             }
         }
@@ -40,7 +42,7 @@ public class Storage_Plane {
     
     public Plane getPlane(String id){
         for (Plane plane : this.planes) {
-            if (plane.getId() == id) {
+            if (plane.getId().equals(id)) {
                 return plane;
             }
         }
@@ -49,12 +51,25 @@ public class Storage_Plane {
     
     public boolean delPlane(String id){
         for (Plane plane : this.planes) {
-            if (plane.getId() == id) {
+            if (plane.getId().equals(id)) {
                 this.planes.remove(plane);
                 return true;
             }
         }
         return false;
     }
-
+    
+    public void cargarJSON(JSONArray array){
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject objecto = array.getJSONObject(i);
+            final String id = objecto.getString("id");
+            String brand = objecto.getString("brand");
+            String model = objecto.getString("model");
+            final int maxCapacity = objecto.getInt("maxCapacity");
+            String airline = objecto.getString("airline");
+            
+            Plane plane = new Plane(id, brand, model, maxCapacity, airline);
+            this.addPlane(plane);
+        }
+    }
 }
