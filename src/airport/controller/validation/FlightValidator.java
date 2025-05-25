@@ -15,12 +15,7 @@ import java.time.LocalDateTime;
  */
 public class FlightValidator {
 
-    public static Responses validateCreate(
-            String id, String planeId,
-            String departureLocationId, String arrivalLocationId, String scaleLocationId,
-            String year, String month, String day, String hour, String minutes,
-            String hoursDurationArrival, String minutesDurationArrival,
-            String hoursDurationScale, String minutesDurationScale) {
+    public static Responses validateCreate(String id, String planeId, String departureLocationId, String arrivalLocationId, String scaleLocationId, String year, String month, String day, String hour, String minutes, String hoursDurationArrival, String minutesDurationArrival, String hoursDurationScale, String minutesDurationScale) {
 
         if (id == null || !id.matches("^[A-Z]{3}\\d{3}$")) {
             return new Responses("Flight ID must have format XXXYYY (3 uppercase letters + 3 digits)", Status.BAD_REQUEST);
@@ -55,6 +50,8 @@ public class FlightValidator {
         if (hoursArrival == 0 && minutesArrival == 0) {
             return new Responses("Flight duration must be greater than 00:00", Status.BAD_REQUEST);
         }
+        
+        
 
         if (scaleLocationId != null && !scaleLocationId.equals("None")) {
             if (hoursDurationScale == null || !hoursDurationScale.matches("\\d+")

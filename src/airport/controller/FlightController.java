@@ -23,7 +23,19 @@ import java.time.LocalDateTime;
  */
 public class FlightController {
 
+    /*
+    Con esta forma en la que se organizan los controladores permite la opcion de open source, ya que en esta clase de Controller se podrian agregar nuevas 
+    clases y paquetes para no cambiar el codigo que ya funciona. Ademas no se puede implementar de forma directa todo SOLID por falta de recursos como interfaces
+    para todo tipo
+    */
+    
     public static Responses createFlight(String id, String planeId, String departureLocationId, String arrivalLocationId, String scaleLocationId, String year, String month, String day, String hour, String minutes, String hoursDurationArrival, String minutesDurationArrival, String hoursDurationScale, String minutesDurationScale) {
         return FlightService.createFlight(id, planeId, departureLocationId, arrivalLocationId, scaleLocationId, year, month, day, hour, minutes, hoursDurationArrival, minutesDurationArrival, hoursDurationScale, minutesDurationScale);
     }
+    
+//    public static Responses delayFlight(String id, String hours, String minutes) {
+//        FlightService service = new FlightService();
+//        return service.delayFlight(id, hours, minutes);
+//    }
+    
 }
