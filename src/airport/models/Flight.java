@@ -115,4 +115,24 @@ public class Flight {
         return passengers.size();
     }
     
+    public Flight(Flight other) {
+        this.id = other.id;
+        this.passengers = new ArrayList<>();
+        for (Passenger p : other.passengers) {
+            this.passengers.add(p.clone());
+        }
+        this.plane = other.plane;
+        this.departureLocation = other.departureLocation;
+        this.scaleLocation = other.scaleLocation;
+        this.arrivalLocation = other.arrivalLocation;
+        this.departureDate = other.departureDate;
+        this.hoursDurationArrival = other.hoursDurationArrival;
+        this.minutesDurationArrival = other.minutesDurationArrival;
+        this.hoursDurationScale = other.hoursDurationScale;
+        this.minutesDurationScale = other.minutesDurationScale;
+    }
+    
+    public Flight clone(){
+        return new Flight(this);
+    }
 }
