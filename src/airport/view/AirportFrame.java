@@ -13,6 +13,8 @@ import airport.models.Flight;
 import airport.models.Location;
 import airport.models.Passenger;
 import airport.models.Plane;
+import airport.models.database.D_Loader;
+import airport.models.database.Storage_Passenger;
 import java.awt.Color;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -1761,11 +1763,15 @@ public class AirportFrame extends javax.swing.JFrame {
 
     private void RefreshPassengersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshPassengersActionPerformed
         // TODO add your handling code here:
+        D_Loader.load_Passengers();
+
         DefaultTableModel model = (DefaultTableModel) refreshpas.getModel();
         model.setRowCount(0);
-        for (Passenger passenger : this.passengers) {
+        for (Passenger passenger : Storage_Passenger.getInstance().getPassengers()) {
             model.addRow(new Object[]{passenger.getId(), passenger.getFullname(), passenger.getBirthDate(), passenger.calculateAge(), passenger.generateFullPhone(), passenger.getCountry(), passenger.getNumFlights()});
         }
+
+
     }//GEN-LAST:event_RefreshPassengersActionPerformed
 
     private void RefreshAllFlightsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshAllFlightsActionPerformed

@@ -49,12 +49,12 @@ public class FlightService {
                 return new Responses("Scale location not found", Status.BAD_REQUEST);
             }
 
-            int y = Integer.parseInt(year);
-            int m = Integer.parseInt(month);
-            int d = Integer.parseInt(day);
-            int h = Integer.parseInt(hour);
-            int min = Integer.parseInt(minutes);
-            LocalDateTime departureDate = LocalDateTime.of(y, m, d, h, min);
+            int yearu = Integer.parseInt(year);
+            int monthu = Integer.parseInt(month);
+            int dayu = Integer.parseInt(day);
+            int houru = Integer.parseInt(hour);
+            int minuteu = Integer.parseInt(minutes);
+            LocalDateTime departureDate = LocalDateTime.of(yearu, monthu, dayu, houru, minuteu);
 
             int hoursArrival = Integer.parseInt(hoursDurationArrival);
             int minutesArrival = Integer.parseInt(minutesDurationArrival);
