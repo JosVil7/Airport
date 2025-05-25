@@ -217,7 +217,7 @@ public class AirportFrame extends javax.swing.JFrame {
         AddFlight = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        myflights = new javax.swing.JTable();
         RefreshFlights = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -225,7 +225,7 @@ public class AirportFrame extends javax.swing.JFrame {
         RefreshPassengers = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        flighttable = new javax.swing.JTable();
         RefreshAllFlights = new javax.swing.JButton();
         jPanel10 = new javax.swing.JPanel();
         RefreshAllPlanes = new javax.swing.JButton();
@@ -233,7 +233,7 @@ public class AirportFrame extends javax.swing.JFrame {
         jTable4 = new javax.swing.JTable();
         jPanel11 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jTable5 = new javax.swing.JTable();
+        locationtable = new javax.swing.JTable();
         RefreshLocations = new javax.swing.JButton();
         jPanel12 = new javax.swing.JPanel();
         Hoursdelay = new javax.swing.JComboBox<>();
@@ -1007,8 +1007,8 @@ public class AirportFrame extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Add to flight", jPanel6);
 
-        jTable1.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        myflights.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        myflights.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -1034,7 +1034,7 @@ public class AirportFrame extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(myflights);
 
         RefreshFlights.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         RefreshFlights.setText("Refresh");
@@ -1129,8 +1129,8 @@ public class AirportFrame extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Show all passengers", jPanel8);
 
-        jTable3.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        flighttable.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
+        flighttable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -1153,7 +1153,7 @@ public class AirportFrame extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane3.setViewportView(jTable3);
+        jScrollPane3.setViewportView(flighttable);
 
         RefreshAllFlights.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         RefreshAllFlights.setText("Refresh");
@@ -1248,7 +1248,7 @@ public class AirportFrame extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Show all planes", jPanel10);
 
-        jTable5.setModel(new javax.swing.table.DefaultTableModel(
+        locationtable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -1271,7 +1271,7 @@ public class AirportFrame extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane5.setViewportView(jTable5);
+        jScrollPane5.setViewportView(locationtable);
 
         RefreshLocations.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         RefreshLocations.setText("Refresh");
@@ -1306,6 +1306,8 @@ public class AirportFrame extends javax.swing.JFrame {
         );
 
         jTabbedPane1.addTab("Show all locations", jPanel11);
+
+        jPanel12.setAutoscrolls(true);
 
         Hoursdelay.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         Hoursdelay.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hour" }));
@@ -1513,8 +1515,6 @@ public class AirportFrame extends javax.swing.JFrame {
         String maxCapacity = MaxCapacity.getText();
         String airline = Airline.getText();
 
-        this.Plane.addItem(id);
-
         Responses response = PlaneController.createPlane(id, brand, model, maxCapacity, airline);
 
         if (response.getStatus() >= 500) {
@@ -1525,6 +1525,7 @@ public class AirportFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, response.getMessage(), "Response Message", JOptionPane.INFORMATION_MESSAGE);
 
             int max = Integer.parseInt(maxCapacity);
+            this.Plane.addItem(id);
             this.planes.add(new Plane(id, brand, model, max, airline));
 
             IDair.setText("");
@@ -1544,10 +1545,6 @@ public class AirportFrame extends javax.swing.JFrame {
         String latitude = Airportlatitude.getText();
         String longitude = Airportlongitude.getText();
 
-        this.DeparLoc.addItem(id);
-        this.ArrivLoc.addItem(id);
-        this.ScalLoc.addItem(id);
-
         Responses response = LocationController.createLocation(id, name, city, country, latitude, longitude);
 
         if (response.getStatus() >= 500) {
@@ -1560,6 +1557,10 @@ public class AirportFrame extends javax.swing.JFrame {
             //creo estas variables para no modificar a agregar la localizacion (aereopuerto)
             double lat = Double.parseDouble(latitude);
             double lon = Double.parseDouble(longitude);
+
+            this.DeparLoc.addItem(id);
+            this.ArrivLoc.addItem(id);
+            this.ScalLoc.addItem(id);
 
             this.locations.add(new Location(id, name, city, country, lat, lon));
 
@@ -1607,7 +1608,7 @@ public class AirportFrame extends javax.swing.JFrame {
             int minutesDurationsArrivali = Integer.parseInt(minutesDurationsArrival);
             int hoursDurationsScalei = Integer.parseInt(hoursDurationsScale);
             int minutesDurationsScalei = Integer.parseInt(minutesDurationsScale);
-            
+
             LocalDateTime departureDate = LocalDateTime.of(yeari, monthi, dayi, houri, minutesi);
 
             Plane plane = null;
@@ -1697,59 +1698,6 @@ public class AirportFrame extends javax.swing.JFrame {
             CountryU.setText("");
         }
 
-//        // TODO add your handling code here:
-//        String id = IDpass.getText();
-//        String firstname = FirstName.getText();
-//        String lastname = LastName.getText();
-//        String year = Year.getText();
-//        String month = MONTH.getItemAt(MONTH.getSelectedIndex());
-//        String day = (DAY.getItemAt(DAY.getSelectedIndex()));
-//        String phoneCode = Pre.getText();
-//        String phone = Number.getText();
-//        String country = Country.getText();
-//
-//        Responses response = PassengerController.createPassenger(id, firstname, lastname, year, month, day, phoneCode, phone, country);
-//
-//        if (response.getStatus() >= 500) {
-//            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
-//        } else if (response.getStatus() >= 400) {
-//            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
-//        } else {
-//            JOptionPane.showMessageDialog(null, response.getMessage(), "Response Message", JOptionPane.INFORMATION_MESSAGE);
-//
-//            IDpass.setText("");
-//            FirstName.setText("");
-//            LastName.setText("");
-//            Year.setText("");
-//            Pre.setText("");
-//            Number.setText("");
-//            Country.setText("");
-//            MONTH.setSelectedIndex(0);
-//            DAY.setSelectedIndex(0);
-//
-//            int ide = Integer.parseInt(id);
-//            int phonecod = Integer.parseInt(phoneCode);
-//            int phonee = Integer.parseInt(phone);
-//            int yeare = Integer.parseInt(year);
-//            int monthe = Integer.parseInt(month);
-//            int daye = Integer.parseInt(day);
-//
-//            LocalDate birthDate = LocalDate.of(yeare, monthe, daye);
-//
-//            this.passengers.add(new Passenger(ide, firstname, lastname, birthDate, phonecod, phonee, country));
-//            this.userSelect.addItem("" + id);
-//
-//            IDpass.setText("");
-//            FirstName.setText("");
-//            LastName.setText("");
-//            Year.setText("");
-//            Pre.setText("");
-//            Number.setText("");
-//            Country.setText("");
-//            MONTH.setSelectedIndex(0);
-//            DAY.setSelectedIndex(0);
-//        }
-
     }//GEN-LAST:event_UpdateActionPerformed
 
     private void AddFlightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddFlightActionPerformed
@@ -1804,7 +1752,7 @@ public class AirportFrame extends javax.swing.JFrame {
         }
 
         ArrayList<Flight> flights = passenger.getFlights();
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        DefaultTableModel model = (DefaultTableModel) myflights.getModel();
         model.setRowCount(0);
         for (Flight flight : flights) {
             model.addRow(new Object[]{flight.getId(), flight.getDepartureDate(), flight.calculateArrivalDate()});
@@ -1822,7 +1770,7 @@ public class AirportFrame extends javax.swing.JFrame {
 
     private void RefreshAllFlightsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshAllFlightsActionPerformed
         // TODO add your handling code here:
-        DefaultTableModel model = (DefaultTableModel) jTable3.getModel();
+        DefaultTableModel model = (DefaultTableModel) flighttable.getModel();
         model.setRowCount(0);
         for (Flight flight : this.flights) {
             model.addRow(new Object[]{flight.getId(), flight.getDepartureLocation().getAirportId(), flight.getArrivalLocation().getAirportId(), (flight.getScaleLocation() == null ? "-" : flight.getScaleLocation().getAirportId()), flight.getDepartureDate(), flight.calculateArrivalDate(), flight.getPlane().getId(), flight.getNumPassengers()});
@@ -1840,7 +1788,7 @@ public class AirportFrame extends javax.swing.JFrame {
 
     private void RefreshLocationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshLocationsActionPerformed
         // TODO add your handling code here:
-        DefaultTableModel model = (DefaultTableModel) jTable5.getModel();
+        DefaultTableModel model = (DefaultTableModel) locationtable.getModel();
         model.setRowCount(0);
         for (Location location : this.locations) {
             model.addRow(new Object[]{location.getAirportId(), location.getAirportName(), location.getAirportCity(), location.getAirportCountry()});
@@ -1936,6 +1884,7 @@ public class AirportFrame extends javax.swing.JFrame {
     private javax.swing.JTextField YearFlight;
     private javax.swing.JTextField YearU;
     private javax.swing.JRadioButton administrator;
+    private javax.swing.JTable flighttable;
     private javax.swing.JButton jButton13;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -2004,10 +1953,9 @@ public class AirportFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable3;
     private javax.swing.JTable jTable4;
-    private javax.swing.JTable jTable5;
+    private javax.swing.JTable locationtable;
+    private javax.swing.JTable myflights;
     private airport.view.PanelRound panelRound1;
     private airport.view.PanelRound panelRound2;
     private airport.view.PanelRound panelRound3;
