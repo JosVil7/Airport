@@ -13,11 +13,14 @@ import airport.models.Flight;
 import airport.models.Location;
 import airport.models.Passenger;
 import airport.models.Plane;
-import airport.models.database.D_Loader;
 import airport.models.database.Storage_Flight;
 import airport.models.database.Storage_Location;
 import airport.models.database.Storage_Passenger;
 import airport.models.database.Storage_Plane;
+import airport.models.jsonloaders.D_Loader_Flight;
+import airport.models.jsonloaders.D_Loader_Location;
+import airport.models.jsonloaders.D_Loader_Passenger;
+import airport.models.jsonloaders.D_Loader_Plane;
 import java.awt.Color;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -1766,7 +1769,7 @@ public class AirportFrame extends javax.swing.JFrame {
 
     private void RefreshPassengersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshPassengersActionPerformed
         // TODO add your handling code here:
-        D_Loader.load_Passengers();
+        D_Loader_Passenger.load_Passengers();
 
         DefaultTableModel model = (DefaultTableModel) refreshpas.getModel();
         model.setRowCount(0);
@@ -1779,7 +1782,7 @@ public class AirportFrame extends javax.swing.JFrame {
 
     private void RefreshAllFlightsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshAllFlightsActionPerformed
         // TODO add your handling code here:
-        D_Loader.load_Flights();
+        D_Loader_Flight.load_Flights();
         
         DefaultTableModel model = (DefaultTableModel) flighttable.getModel();
         model.setRowCount(0);
@@ -1790,7 +1793,7 @@ public class AirportFrame extends javax.swing.JFrame {
 
     private void RefreshAllPlanesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshAllPlanesActionPerformed
         // TODO add your handling code here:
-        D_Loader.load_Planes();
+        D_Loader_Plane.load_Planes();
         
         DefaultTableModel model = (DefaultTableModel) jTable4.getModel();
         model.setRowCount(0);
@@ -1802,7 +1805,7 @@ public class AirportFrame extends javax.swing.JFrame {
     private void RefreshLocationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshLocationsActionPerformed
         // TODO add your handling code here:
         
-        D_Loader.load_Locations();
+        D_Loader_Location.load_Locations();
         
         DefaultTableModel model = (DefaultTableModel) locationtable.getModel();
         model.setRowCount(0);
