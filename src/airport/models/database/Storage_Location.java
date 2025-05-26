@@ -6,6 +6,8 @@ package airport.models.database;
 
 import airport.models.Location;
 import airport.models.database.interfaces.ILocationStorage;
+import airport.models.database.interfaces.Observer;
+import airport.models.database.interfaces.Subject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -17,13 +19,15 @@ import org.json.JSONObject;
  *
  * @author USER
  */
-public class Storage_Location implements ILocationStorage {
+public class Storage_Location implements ILocationStorage, Subject {
 
     public static Storage_Location instance;
     private ArrayList<Location> locations;
-
+    private final List<Observer> observers;
+    
     private Storage_Location() {
         this.locations = new ArrayList<>();
+        this.observers = new ArrayList<>();
     }
 
     public static Storage_Location getInstance() {
@@ -95,5 +99,22 @@ public class Storage_Location implements ILocationStorage {
             copiedLocations.add(loc.clone());
         }
         return copiedLocations;
+    }
+    
+    @Override
+    public void notificarOb(){
+        for (Observer observer : this.observers) {
+            observer.actualizar();
+        }
+    }
+    
+    @Override
+    public void quitarOb(Observer o){
+        this.observers.remove(o);
+    }
+    
+    @Override
+    public void registrarOb(Observer o){
+        this.observers.add(o);
     }
 }

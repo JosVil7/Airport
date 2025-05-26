@@ -10,6 +10,8 @@ import airport.models.Plane;
 import airport.models.database.interfaces.IFlightStorage;
 import airport.models.database.interfaces.ILocationStorage;
 import airport.models.database.interfaces.IPlaneStorage;
+import airport.models.database.interfaces.Observer;
+import airport.models.database.interfaces.Subject;
 import java.time.LocalDateTime;
 
 import java.util.ArrayList;
@@ -23,10 +25,11 @@ import org.json.JSONObject;
  *
  * @author USER
  */
-public class Storage_Flight implements IFlightStorage {
+public class Storage_Flight implements IFlightStorage, Subject {
 
     private static Storage_Flight instance;
     private ArrayList<Flight> flights;
+    private final List<Observer> observers;
 
     private IPlaneStorage planeStorage;
     private ILocationStorage locationStorage;
@@ -35,6 +38,7 @@ public class Storage_Flight implements IFlightStorage {
         this.flights = new ArrayList<>();
         this.planeStorage = Storage_Plane.getInstance();
         this.locationStorage = Storage_Location.getInstance();
+        this.observers = new ArrayList<>();
     }
 
     public static Storage_Flight getInstance() {
@@ -150,6 +154,23 @@ public class Storage_Flight implements IFlightStorage {
             copiedFlights.add(f.clone());
         }
         return copiedFlights;
+    }
+    
+    @Override
+    public void notificarOb(){
+        for (Observer observer : this.observers) {
+            observer.actualizar();
+        }
+    }
+    
+    @Override
+    public void quitarOb(Observer o){
+        this.observers.remove(o);
+    }
+    
+    @Override
+    public void registrarOb(Observer o){
+        this.observers.add(o);
     }
 }
 

@@ -8,6 +8,8 @@ package airport.models.database;
 import airport.models.Flight;
 import airport.models.Plane;
 import airport.models.database.interfaces.IPlaneStorage;
+import airport.models.database.interfaces.Observer;
+import airport.models.database.interfaces.Subject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,13 +24,14 @@ import org.json.JSONObject;
  * @author USER
  */
 
-public class Storage_Plane implements IPlaneStorage { 
+public class Storage_Plane implements IPlaneStorage, Subject { 
 
     public static Storage_Plane instance;
     private ArrayList<Plane> planes;
-
+    private final List<Observer> observers;
     private Storage_Plane() {
         this.planes = new ArrayList<>();
+        this.observers = new ArrayList<>();
     }
 
     public static Storage_Plane getInstance() {
@@ -97,5 +100,22 @@ public class Storage_Plane implements IPlaneStorage {
                 this.addPlane(plane); 
             }
         }
+    }
+    
+    @Override
+    public void notificarOb(){
+        for (Observer observer : this.observers) {
+            observer.actualizar();
+        }
+    }
+    
+    @Override
+    public void quitarOb(Observer o){
+        this.observers.remove(o);
+    }
+    
+    @Override
+    public void registrarOb(Observer o){
+        this.observers.add(o);
     }
 }

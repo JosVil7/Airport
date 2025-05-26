@@ -6,6 +6,8 @@ package airport.models.database;
 
 import airport.models.database.interfaces.IPassengerStorage;
 import airport.models.Passenger;
+import airport.models.database.interfaces.Observer;
+import airport.models.database.interfaces.Subject;
 import java.util.List;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,13 +20,16 @@ import org.json.JSONObject;
  *
  * @author USER
  */
-public class Storage_Passenger implements IPassengerStorage {
+public class Storage_Passenger implements IPassengerStorage, Subject {
 
     private static Storage_Passenger instance;
     private ArrayList<Passenger> passengers;
+    private final List<Observer> observers;
+    
 
     private Storage_Passenger() {
         this.passengers = new ArrayList<>();
+        this.observers = new ArrayList<>();
     }
 
     public static Storage_Passenger getInstance() {
@@ -109,5 +114,21 @@ public class Storage_Passenger implements IPassengerStorage {
         }
         return clonedPassengers; 
     }
-
+    
+    @Override
+    public void notificarOb(){
+        for (Observer observer : this.observers) {
+            observer.actualizar();
+        }
+    }
+    
+    @Override
+    public void quitarOb(Observer o){
+        this.observers.remove(o);
+    }
+    
+    @Override
+    public void registrarOb(Observer o){
+        this.observers.add(o);
+    }
 }

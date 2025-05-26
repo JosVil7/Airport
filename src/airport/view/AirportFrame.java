@@ -15,6 +15,7 @@ import airport.models.Location;
 import airport.models.Passenger;
 import airport.models.Plane;
 import airport.models.database.Storage_Flight;
+import airport.models.database.interfaces.Observer;
 import airport.models.jsonloaders.D_Loader_Flight;
 import airport.models.jsonloaders.D_Loader_Location;
 import airport.models.jsonloaders.D_Loader_Passenger;
@@ -30,7 +31,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author edangulo
  */
-public class AirportFrame extends javax.swing.JFrame {
+public class AirportFrame extends javax.swing.JFrame implements Observer {
 
     /**
      * Creates new form AirportFrame
@@ -72,6 +73,8 @@ public class AirportFrame extends javax.swing.JFrame {
         this.generateHours();
         this.generateMinutes();
         this.blockPanels();
+        
+        actualizarTodo();
     }
 
     private void blockPanels() {
@@ -1900,6 +1903,11 @@ public class AirportFrame extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Error refreshing locations: " + response.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    @Override
+    public void actualizar(){
+        actualizarTodo();
     }
     
     private void actualizarTodo(){
