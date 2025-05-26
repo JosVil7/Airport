@@ -48,7 +48,9 @@ public class Storage_Passenger implements IPassengerStorage {
     public Passenger getPassenger(long id) {
         for (Passenger passenger : this.passengers) {
             if (passenger.getId() == id) {
-                return passenger.clone(); 
+
+            return passenger.clone(); 
+
             }
         }
         return null;
@@ -95,4 +97,14 @@ public class Storage_Passenger implements IPassengerStorage {
             }
         }
     }
+
+    
+    public List<Passenger> getPassengers() {
+    ArrayList<Passenger> clonedPassengers = new ArrayList<>();
+        for (Passenger p : this.passengers) {
+            clonedPassengers.add(p.clone());
+        }
+        return clonedPassengers; 
+    }
+
 }

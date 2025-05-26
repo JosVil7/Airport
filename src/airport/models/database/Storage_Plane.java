@@ -19,9 +19,9 @@ import org.json.JSONObject;
  *
  * @author USER
  */
-public class Storage_Plane implements IPlaneStorage{
+public class Storage_Plane implements IPlaneStorage { // <--- Implement IPlaneStorage
 
-   public static Storage_Plane instance;
+    public static Storage_Plane instance;
     private ArrayList<Plane> planes;
 
     private Storage_Plane() {
@@ -99,5 +99,4 @@ public class Storage_Plane implements IPlaneStorage{
             }
         }
     }
-    
 }

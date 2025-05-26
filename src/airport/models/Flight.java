@@ -116,16 +116,35 @@ public class Flight {
     }
     
     public Flight(Flight other) {
-        this.id = other.id;
+        this.id = other.id;     
         this.passengers = new ArrayList<>();
         for (Passenger p : other.passengers) {
-            this.passengers.add(p.clone());
+            this.passengers.add(p.clone()); 
         }
-        this.plane = other.plane;
-        this.departureLocation = other.departureLocation;
-        this.scaleLocation = other.scaleLocation;
-        this.arrivalLocation = other.arrivalLocation;
-        this.departureDate = other.departureDate;
+        if (other.plane != null) {
+            this.plane = other.plane.clone(); 
+        } else {
+            this.plane = null;
+        }
+        
+        if (other.departureLocation != null) {
+            this.departureLocation = other.departureLocation.clone(); 
+        } else {
+            this.departureLocation = null;
+        }
+        
+        if (other.scaleLocation != null) {
+            this.scaleLocation = other.scaleLocation.clone(); 
+        } else {
+            this.scaleLocation = null;
+        }
+        
+        if (other.arrivalLocation != null) {
+            this.arrivalLocation = other.arrivalLocation.clone(); 
+        } else {
+            this.arrivalLocation = null;
+        }
+        this.departureDate = other.departureDate; 
         this.hoursDurationArrival = other.hoursDurationArrival;
         this.minutesDurationArrival = other.minutesDurationArrival;
         this.hoursDurationScale = other.hoursDurationScale;

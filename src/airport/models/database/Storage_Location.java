@@ -42,7 +42,7 @@ public class Storage_Location {
     public Location getLocation(String A_id){
         for (Location location : this.locations) {
             if (location.getAirportId().equals(A_id)) {
-                return location;
+            return location.clone(); 
             }
         }
         return null;
@@ -73,6 +73,10 @@ public class Storage_Location {
     }
     
     public List<Location> getLocations() {
-        return this.locations;
+    ArrayList<Location> clonedLocations = new ArrayList<>();
+        for (Location loc : this.locations) {
+            clonedLocations.add(loc.clone());
+        }
+        return clonedLocations; 
     }
 }
