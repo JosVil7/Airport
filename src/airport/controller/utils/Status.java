@@ -9,19 +9,19 @@ package airport.controller.utils;
  * @author Jose
  */
 public enum Status {
-    // 2xx Success
+    // exitos
     OK(200, "OK"),
     CREATED(201, "Created"),
     ACCEPTED(202, "Accepted"),
 
-    // 4xx Client Error
+    // Errores del cliente
     BAD_REQUEST(400, "Bad Request"),
     UNAUTHORIZED(401, "Unauthorized"),
     FORBIDDEN(403, "Forbidden"),
     NOT_FOUND(404, "Not Found"),
     CONFLICT(409, "Conflict"), // Useful for duplicate IDs
 
-    // 5xx Server Error
+    // Errores del servidor o aplicacion
     INTERNAL_SERVER_ERROR(500, "Internal Server Error"),
     NOT_IMPLEMENTED(501, "Not Implemented"),
     SERVICE_UNAVAILABLE(503, "Service Unavailable");

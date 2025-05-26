@@ -13,9 +13,9 @@ import org.json.JSONArray;
  * @author USER
  */
 public interface ILocationStorage {
-    void cargarJSON(JSONArray array);
-    Location getLocation(String locationId);
-    List<Location> getLocations();
-    boolean addLocation(Location location);
-    boolean delLocation(String locationId);
+    public boolean addLocation(Location location);
+    public Location getLocation(String A_id);
+    public boolean delLocation(String A_id); 
+    public void cargarJSON(JSONArray array); 
+    public List<Location> getAllLocations();
 }

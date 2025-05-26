@@ -10,8 +10,8 @@ import airport.controller.utils.Responses;
  *
  * @author Jose
  */
-public interface IPlaneService {
-
-    Responses createPlane(String id, String brand, String model, String maxCapacity, String airline);
-    Responses getAllPlanes();
+public interface ILocationService {
+    Responses createLocation(String id, String name, String city, String country, String latitude, String longitude);
+    Responses getAllLocations(); 
+    Responses getLocationById(String id);
 }

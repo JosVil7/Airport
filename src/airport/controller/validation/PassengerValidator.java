@@ -15,19 +15,7 @@ import java.time.LocalDate;
  */
 public class PassengerValidator {
 
-    /**
-     * Validates all input fields for passenger creation or update.
-     * @param idp Passenger ID string.
-     * @param firstname Passenger's first name string.
-     * @param lastname Passenger's last name string.
-     * @param year Birth year string.
-     * @param month Birth month string.
-     * @param day Birth day string.
-     * @param phoneCode Phone country code string.
-     * @param phone Phone number string.
-     * @param country Passenger's country string.
-     * @return A Responses object with BAD_REQUEST status if validation fails, otherwise null.
-     */
+  
     public static Responses validateCreate(String idp, String firstname, String lastname, String year, String month, String day, String phoneCode, String phone, String country) {
         // ID Validation
         if (idp == null || idp.trim().isEmpty()) {
@@ -102,16 +90,9 @@ public class PassengerValidator {
             return new Responses("Country must not be empty.", Status.BAD_REQUEST);
         }
 
-        return null; // All basic validations passed
+        return null; 
     }
-
-    /**
-     * Validates the components of a birth date.
-     * @param year The year.
-     * @param month The month.
-     * @param day The day.
-     * @return A Responses object with BAD_REQUEST status if the date is invalid or out of range, otherwise null.
-     */
+    
     public static Responses validateBirthDate(int year, int month, int day) {
         try {
             LocalDate birthDate = LocalDate.of(year, month, day);

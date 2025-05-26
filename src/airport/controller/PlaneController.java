@@ -21,25 +21,11 @@ public class PlaneController {
         planeService = service;
     }
 
-    /**
-     * Handles the creation of a new plane.
-     *
-     * @param id Plane ID.
-     * @param brand Plane brand.
-     * @param model Plane model.
-     * @param maxCapacity Maximum passenger capacity.
-     * @param airline Airline name.
-     * @return A Responses object indicating the outcome of the operation.
-     */
+    
     public static Responses createPlane(String id, String brand, String model, String maxCapacity, String airline) {
         return planeService.createPlane(id, brand, model, maxCapacity, airline);
     }
 
-    /**
-     * Retrieves a list of all planes.
-     *
-     * @return A Responses object containing a List of Planes.
-     */
     public static Responses getAllPlanes() {
         return planeService.getAllPlanes();
     }

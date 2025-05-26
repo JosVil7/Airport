@@ -13,15 +13,7 @@ import airport.controller.utils.Status;
  */
 public class PlaneValidator {
 
-    /**
-     * Validates all input fields for plane creation.
-     * @param id Plane ID string.
-     * @param brand Plane brand string.
-     * @param model Plane model string.
-     * @param maxCapacity Maximum passenger capacity string.
-     * @param airline Airline name string.
-     * @return A Responses object with BAD_REQUEST status if validation fails, otherwise null.
-     */
+    
     public static Responses validateCreate(String id, String brand, String model, String maxCapacity, String airline) {
         
         if (id == null || id.trim().isEmpty()) {
@@ -54,7 +46,7 @@ public class PlaneValidator {
             return new Responses("Invalid Max Capacity format. Must be a valid number.", Status.BAD_REQUEST);
         }
 
-        // Airline Validation
+        
         if (airline == null || airline.trim().isEmpty()) {
             return new Responses("Airline must not be empty.", Status.BAD_REQUEST);
         }

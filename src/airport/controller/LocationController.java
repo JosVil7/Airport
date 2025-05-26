@@ -4,25 +4,52 @@
  */
 package airport.controller;
 
+import airport.controller.interfaces.ILocationService;
 import airport.controller.service.LocationService;
 import airport.controller.utils.Responses;
-import airport.controller.utils.Status;
-import airport.models.Location;
-import airport.models.database.Storage_Location;
 
 /**
  *
  * @author Jose
  */
 
-/*
-    Con esta forma en la que se organizan los controladores permite la opcion de open source, ya que en esta clase de Controller se podrian agregar nuevas 
-    clases y paquetes para no cambiar el codigo que ya funciona. Ademas no se puede implementar de forma directa todo SOLID por falta de recursos como interfaces
-    para todo tipo
-    */
 public class LocationController {
 
+    private static ILocationService locationService = new LocationService(); // Dependency Injection
+
+    // Setter for dependency injection (useful for testing)
+    public static void setLocationService(ILocationService service) {
+        locationService = service;
+    }
+
+    /**
+     * Handles the creation of a new airport location.
+     * @param id Airport ID.
+     * @param name Airport name.
+     * @param city City of the airport.
+     * @param country Country of the airport.
+     * @param latitude Latitude coordinate.
+     * @param longitude Longitude coordinate.
+     * @return A Responses object indicating the outcome of the operation.
+     */
     public static Responses createLocation(String id, String name, String city, String country, String latitude, String longitude) {
-        return LocationService.createLocation(id, name, city, country, latitude, longitude);
+        return locationService.createLocation(id, name, city, country, latitude, longitude);
+    }
+
+    /**
+     * Retrieves a list of all airport locations.
+     * @return A Responses object containing a List of Locations.
+     */
+    public static Responses getAllLocations() {
+        return locationService.getAllLocations();
+    }
+
+    /**
+     * Retrieves a specific location by its ID.
+     * @param id Location ID.
+     * @return A Responses object containing the Location if found, or an error message.
+     */
+    public static Responses getLocationById(String id) {
+        return locationService.getLocationById(id);
     }
 }

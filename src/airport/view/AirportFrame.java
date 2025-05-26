@@ -63,6 +63,7 @@ public class AirportFrame extends javax.swing.JFrame {
         D_Loader_Location.load_Locations();
         actualizarTablaDeUbicaciones();
         
+        populateLocationComboBoxes();
         populatePlaneComboBox();
 
         this.passengers = new ArrayList<>();
@@ -1602,16 +1603,8 @@ public class AirportFrame extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(null, response.getMessage(), "Response Message", JOptionPane.INFORMATION_MESSAGE);
 
-            //creo estas variables para no modificar a agregar la localizacion (aereopuerto)
-            double lat = Double.parseDouble(latitude);
-            double lon = Double.parseDouble(longitude);
-
-            this.DeparLoc.addItem(id);
-            this.ArrivLoc.addItem(id);
-            this.ScalLoc.addItem(id);
-
-            this.locations.add(new Location(id, name, city, country, lat, lon));
-
+            populateLocationComboBoxes();
+            
             IDairport.setText("");
             Airportname.setText("");
             Airportcity.setText("");
@@ -1620,7 +1613,29 @@ public class AirportFrame extends javax.swing.JFrame {
             Airportlongitude.setText("");
         }
     }//GEN-LAST:event_CreateLocActionPerformed
+    
+    private void populateLocationComboBoxes() {
+        DeparLoc.removeAllItems();
+        DeparLoc.addItem("Location");
 
+        ArrivLoc.removeAllItems();
+        ArrivLoc.addItem("Location");
+
+        ScalLoc.removeAllItems();
+        ScalLoc.addItem("Location");
+
+        Responses response = LocationController.getAllLocations();
+        if (response.getStatus() == Status.OK.getCode() && response.getData() instanceof List) {
+            List<Location> locationsList = (List<Location>) response.getData();
+            for (Location loc : locationsList) {
+                DeparLoc.addItem(loc.getAirportId());
+                ArrivLoc.addItem(loc.getAirportId());
+                ScalLoc.addItem(loc.getAirportId());
+            }
+        } else {
+            // JOptionPane.showMessageDialog(this, "Error loading locations for selection: " + response.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     private void CreaterFlightResActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreaterFlightResActionPerformed
         // TODO add your handling code here:
         String id = IDplane.getText();
@@ -1881,28 +1896,31 @@ public class AirportFrame extends javax.swing.JFrame {
     private void RefreshLocationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshLocationsActionPerformed
         // TODO add your handling code here:
 
-        D_Loader_Location.load_Locations();
-
-        DefaultTableModel model = (DefaultTableModel) locationtable.getModel();
-        model.setRowCount(0);
-        for (Location location : Storage_Location.getInstance().getLocations()) {
-            model.addRow(new Object[]{location.getAirportId(), location.getAirportName(), location.getAirportCity(), location.getAirportCountry()});
-        }
+        actualizarTablaDeUbicaciones();
     }//GEN-LAST:event_RefreshLocationsActionPerformed
 
     private void actualizarTablaDeUbicaciones() {
         DefaultTableModel model = (DefaultTableModel) locationtable.getModel();
-        model.setRowCount(0);
+        model.setRowCount(0); 
 
-        for (Location location : Storage_Location.getInstance().getLocations()) {
-            model.addRow(new Object[]{
-                location.getAirportId(),
-                location.getAirportName(),
-                location.getAirportCity(),
-                location.getAirportCountry(),
-                location.getAirportLatitude(),
-                location.getAirportLongitude()
-            });
+        Responses response = LocationController.getAllLocations(); 
+
+        if (response.getStatus() == Status.OK.getCode() && response.getData() instanceof List) {
+            List<Location> locationsList = (List<Location>) response.getData();
+            for (Location location : locationsList) {
+                model.addRow(new Object[]{
+                    location.getAirportId(),
+                    location.getAirportName(),
+                    location.getAirportCity(),
+                    location.getAirportCountry(),
+                    location.getAirportLatitude(),
+                    location.getAirportLongitude()
+                });
+            }
+        } else if (response.getStatus() == Status.NOT_FOUND.getCode()) {
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Information", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Error refreshing locations: " + response.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

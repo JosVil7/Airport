@@ -21,13 +21,12 @@ import java.util.List;
  */
 public class PassengerService implements IPassengerService {
 
-    private IPassengerStorage passengerStorage; // Dependency Injected
+    private IPassengerStorage passengerStorage;
 
     public PassengerService() {
-        this.passengerStorage = Storage_Passenger.getInstance(); // Default concrete implementation
+        this.passengerStorage = Storage_Passenger.getInstance();
     }
 
-    // Constructor for dependency injection (useful for testing)
     public PassengerService(IPassengerStorage passengerStorage) {
         this.passengerStorage = passengerStorage;
     }
@@ -48,7 +47,6 @@ public class PassengerService implements IPassengerService {
             int phoneCodeInt = Integer.parseInt(phoneCode);
             long phoneLong = Long.parseLong(phone);
 
-            // Validate birth date validity and range
             Responses birthValidation = PassengerValidator.validateBirthDate(yearInt, monthInt, dayInt);
             if (birthValidation != null) {
                 return birthValidation;
@@ -56,7 +54,6 @@ public class PassengerService implements IPassengerService {
 
             LocalDate birthDate = LocalDate.of(yearInt, monthInt, dayInt);
 
-            // Check if passenger with this ID already exists
             if (passengerStorage.getPassenger(id) != null) {
                 return new Responses("Passenger with this ID already exists", Status.BAD_REQUEST);
             }
@@ -65,7 +62,7 @@ public class PassengerService implements IPassengerService {
             boolean added = passengerStorage.addPassenger(passenger);
 
             if (!added) {
-                // This case should ideally be caught by the prior getPassenger check, but good for robustness
+
                 return new Responses("Failed to add passenger, possibly duplicate ID.", Status.BAD_REQUEST);
             }
 
@@ -84,7 +81,7 @@ public class PassengerService implements IPassengerService {
 
     @Override
     public Responses updatePassenger(String idp, String firstname, String lastname, String year, String month, String day, String phoneCode, String phone, String country) {
-        // Validate input data using the same validation as create, as per requirements
+
         Responses validationResponse = PassengerValidator.validateCreate(idp, firstname, lastname, year, month, day, phoneCode, phone, country);
         if (validationResponse != null) {
             return validationResponse;
@@ -98,7 +95,6 @@ public class PassengerService implements IPassengerService {
             int phoneCodeInt = Integer.parseInt(phoneCode);
             long phoneLong = Long.parseLong(phone);
 
-            // Validate birth date validity and range
             Responses birthValidation = PassengerValidator.validateBirthDate(yearInt, monthInt, dayInt);
             if (birthValidation != null) {
                 return birthValidation;
@@ -109,7 +105,6 @@ public class PassengerService implements IPassengerService {
                 return new Responses("Passenger with ID " + id + " not found for update.", Status.NOT_FOUND);
             }
 
-            // Update passenger object fields
             passengerToUpdate.setFirstname(firstname);
             passengerToUpdate.setLastname(lastname);
             passengerToUpdate.setBirthDate(LocalDate.of(yearInt, monthInt, dayInt));
