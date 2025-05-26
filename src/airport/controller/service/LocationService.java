@@ -31,7 +31,7 @@ public class LocationService implements ILocationService {
 
     @Override
     public Responses createLocation(String id, String name, String city, String country, String latitude, String longitude) {
-        // ... (your existing createLocation implementation)
+        
         try {
             Responses validationResponse = LocationValidator.validateCreate(id, name, city, country, latitude, longitude);
             if (validationResponse != null) {

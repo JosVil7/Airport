@@ -14,4 +14,6 @@ public interface IPlaneService {
 
     Responses createPlane(String id, String brand, String model, String maxCapacity, String airline);
     Responses getAllPlanes();
+     Responses getPlaneById(String id); 
+
 }

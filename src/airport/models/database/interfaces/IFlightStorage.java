@@ -13,9 +13,16 @@ import org.json.JSONArray;
  * @author USER
  */
 public interface IFlightStorage {
-    List<Flight> getFlightss();
-    void cargarJSON(JSONArray array);
-    boolean delFlight(String id);
-    Flight getFlight(String id);
-    boolean addFlight(Flight flight);
+
+    public boolean addFlight(Flight flight);
+
+    public Flight getFlight(String id);
+
+    public boolean delFlight(String id);
+
+    public boolean updateFlight(Flight flight);
+
+    public void cargarJSON(JSONArray array);
+
+    public List<Flight> getAllFlights();
 }

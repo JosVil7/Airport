@@ -9,8 +9,8 @@ import airport.controller.utils.Responses;
 import airport.controller.utils.Status;
 import airport.controller.validation.PlaneValidator;
 import airport.models.Plane;
-import airport.models.database.interfaces.IPlaneStorage;
 import airport.models.database.Storage_Plane;
+import airport.models.database.interfaces.IPlaneStorage;
 import java.util.List;
 
 /**
@@ -19,17 +19,17 @@ import java.util.List;
  */
 public class PlaneService implements IPlaneService {
 
-    private IPlaneStorage planeStorage; 
+    private IPlaneStorage planeStorage;
 
     public PlaneService() {
-        this.planeStorage = Storage_Plane.getInstance(); 
+        this.planeStorage = Storage_Plane.getInstance();
     }
 
     public PlaneService(IPlaneStorage planeStorage) {
         this.planeStorage = planeStorage;
     }
 
-    @Override 
+    @Override
     public Responses createPlane(String id, String brand, String model, String maxCapacity, String airline) {
         Responses validationResponse = PlaneValidator.validateCreate(id, brand, model, maxCapacity, airline);
         if (validationResponse != null) {
@@ -42,7 +42,7 @@ public class PlaneService implements IPlaneService {
             }
 
             int maxCap = Integer.parseInt(maxCapacity);
-            if (maxCap <= 0) { 
+            if (maxCap <= 0) {
                 return new Responses("Max capacity must be a positive number.", Status.BAD_REQUEST);
             }
 
@@ -58,22 +58,36 @@ public class PlaneService implements IPlaneService {
         } catch (NumberFormatException e) {
             return new Responses("Max Capacity must be a valid number.", Status.BAD_REQUEST);
         } catch (Exception ex) {
-            ex.printStackTrace(); 
+            ex.printStackTrace();
             return new Responses("An unexpected error occurred during plane creation.", Status.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @Override 
+    @Override
     public Responses getAllPlanes() {
         try {
-            List<Plane> planes = planeStorage.getAllPlanes(); 
+            List<Plane> planes = planeStorage.getAllPlanes();
             if (planes.isEmpty()) {
                 return new Responses("No planes found.", Status.NOT_FOUND);
             }
-            return new Responses("Planes retrieved successfully", Status.OK, planes); 
+            return new Responses("Planes retrieved successfully", Status.OK, planes);
         } catch (Exception e) {
             e.printStackTrace();
             return new Responses("An unexpected error occurred while retrieving all planes.", Status.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public Responses getPlaneById(String id) { // Implement the method
+        try {
+            Plane plane = planeStorage.getPlane(id);
+            if (plane == null) {
+                return new Responses("Plane with ID " + id + " not found.", Status.NOT_FOUND);
+            }
+            return new Responses("Plane retrieved successfully.", Status.OK, plane.clone()); // Return a clone
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Responses("An unexpected error occurred while retrieving the plane by ID.", Status.INTERNAL_SERVER_ERROR);
         }
     }
 }

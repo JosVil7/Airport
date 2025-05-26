@@ -4,31 +4,22 @@
  */
 package airport.view;
 
-import airport.controller.FlightController;
+//import airport.controller.FlightController;
 import airport.controller.LocationController;
 import airport.controller.PassengerController;
 import airport.controller.PlaneController;
-import airport.controller.service.FlightService;
 import airport.controller.utils.Responses;
 import airport.controller.utils.Status;
 import airport.models.Flight;
 import airport.models.Location;
 import airport.models.Passenger;
 import airport.models.Plane;
-import airport.models.jsonloaders.D_Loader_Flight;
-import airport.models.jsonloaders.D_Loader_Location;
-import airport.models.jsonloaders.D_Loader_Passenger;
-import airport.models.jsonloaders.D_Loader_Plane;
 import airport.models.database.Storage_Flight;
-import airport.models.database.Storage_Location;
-import airport.models.database.Storage_Passenger;
-import airport.models.database.Storage_Plane;
 import airport.models.jsonloaders.D_Loader_Flight;
 import airport.models.jsonloaders.D_Loader_Location;
 import airport.models.jsonloaders.D_Loader_Passenger;
 import airport.models.jsonloaders.D_Loader_Plane;
 import java.awt.Color;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,9 +53,11 @@ public class AirportFrame extends javax.swing.JFrame {
 
         D_Loader_Location.load_Locations();
         actualizarTablaDeUbicaciones();
-        
+
         populateLocationComboBoxes();
         populatePlaneComboBox();
+
+        
 
         this.passengers = new ArrayList<>();
         this.planes = new ArrayList<>();
@@ -1567,23 +1560,19 @@ public class AirportFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_CreateAirActionPerformed
 
     private void populatePlaneComboBox() {
-    Plane.removeAllItems(); // Clear existing items
-    Plane.addItem("Plane"); // Add default item
-    Responses response = PlaneController.getAllPlanes();
-    if (response.getStatus() == Status.OK.getCode() && response.getData() instanceof List) {
-        List<Plane> planes = (List<Plane>) response.getData();
-        for (Plane p : planes) {
-            Plane.addItem(p.getId());
-            // Also add to IDdelay for flight delay if it refers to plane ID
-            // IDdelay.addItem(p.getId()); // Might be Flight ID, not Plane ID. Confirm usage.
+        Plane.removeAllItems(); // Clear existing items
+        Plane.addItem("Plane"); // Add default item
+        Responses response = PlaneController.getAllPlanes();
+        if (response.getStatus() == Status.OK.getCode() && response.getData() instanceof List) {
+            List<Plane> planes = (List<Plane>) response.getData();
+            for (Plane p : planes) {
+                Plane.addItem(p.getId());
+            }
+        } else {
+            // JOptionPane.showMessageDialog(this, "Error loading planes for selection: " + response.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-    } else {
-        // Optionally, show an error if planes couldn't be loaded
-        // JOptionPane.showMessageDialog(this, "Error loading planes for selection: " + response.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
-}
-    
-    
+
 
     private void CreateLocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateLocActionPerformed
         // TODO add your handling code here:
@@ -1604,7 +1593,7 @@ public class AirportFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, response.getMessage(), "Response Message", JOptionPane.INFORMATION_MESSAGE);
 
             populateLocationComboBoxes();
-            
+
             IDairport.setText("");
             Airportname.setText("");
             Airportcity.setText("");
@@ -1613,7 +1602,7 @@ public class AirportFrame extends javax.swing.JFrame {
             Airportlongitude.setText("");
         }
     }//GEN-LAST:event_CreateLocActionPerformed
-    
+
     private void populateLocationComboBoxes() {
         DeparLoc.removeAllItems();
         DeparLoc.addItem("Location");
@@ -1637,7 +1626,7 @@ public class AirportFrame extends javax.swing.JFrame {
         }
     }
     private void CreaterFlightResActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreaterFlightResActionPerformed
-        // TODO add your handling code here:
+         // TODO add your handling code here:
         String id = IDplane.getText();
         String planeId = Plane.getItemAt(Plane.getSelectedIndex());
         String departureLocationId = DeparLoc.getItemAt(DeparLoc.getSelectedIndex());
@@ -1653,58 +1642,60 @@ public class AirportFrame extends javax.swing.JFrame {
         String hoursDurationsScale = MONTH4.getItemAt(MONTH4.getSelectedIndex());
         String minutesDurationsScale = DAY4.getItemAt(DAY4.getSelectedIndex());
 
-        Responses response = FlightController.createFlight(id, planeId, departureLocationId, arrivalLocationId, scaleLocationId, year, month, day, hour, minutes, hoursDurationsArrival, minutesDurationsArrival, hoursDurationsScale, minutesDurationsScale);
-
-        if (response.getStatus() >= 500) {
-            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
-        } else if (response.getStatus() >= 400) {
-            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(null, response.getMessage(), "Response Message", JOptionPane.INFORMATION_MESSAGE);
-
-            int yeari = Integer.parseInt(year);
-            int monthi = Integer.parseInt(month);
-            int dayi = Integer.parseInt(day);
-            int houri = Integer.parseInt(hour);
-            int minutesi = Integer.parseInt(minutes);
-            int hoursDurationsArrivali = Integer.parseInt(hoursDurationsArrival);
-            int minutesDurationsArrivali = Integer.parseInt(minutesDurationsArrival);
-            int hoursDurationsScalei = Integer.parseInt(hoursDurationsScale);
-            int minutesDurationsScalei = Integer.parseInt(minutesDurationsScale);
-
-            LocalDateTime departureDate = LocalDateTime.of(yeari, monthi, dayi, houri, minutesi);
-
-            Plane plane = null;
-            for (Plane p : this.planes) {
-                if (planeId.equals(p.getId())) {
-                    plane = p;
-                }
-            }
-
-            Location departure = null;
-            Location arrival = null;
-            Location scale = null;
-            for (Location location : this.locations) {
-                if (departureLocationId.equals(location.getAirportId())) {
-                    departure = location;
-                }
-                if (arrivalLocationId.equals(location.getAirportId())) {
-                    arrival = location;
-                }
-                if (scaleLocationId.equals(location.getAirportId())) {
-                    scale = location;
-                }
-            }
-
-            if (scale == null) {
-                this.flights.add(new Flight(id, plane, departure, arrival, departureDate, hoursDurationsArrivali, minutesDurationsArrivali));
-            } else {
-                this.flights.add(new Flight(id, plane, departure, scale, arrival, departureDate, hoursDurationsArrivali, minutesDurationsArrivali, hoursDurationsScalei, minutesDurationsScalei));
-            }
-
-            this.Flight.addItem(id);
-        }
+//        Responses response = FlightController.createFlight(id, planeId, departureLocationId, arrivalLocationId, scaleLocationId, year, month, day, hour, minutes, hoursDurationsArrival, minutesDurationsArrival, hoursDurationsScale, minutesDurationsScale);
+//
+//        if (response.getStatus() >= 500) {
+//            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
+//        } else if (response.getStatus() >= 400) {
+//            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
+//        } else {
+//            JOptionPane.showMessageDialog(null, response.getMessage(), "Response Message", JOptionPane.INFORMATION_MESSAGE);
+//
+//            int yeari = Integer.parseInt(year);
+//            int monthi = Integer.parseInt(month);
+//            int dayi = Integer.parseInt(day);
+//            int houri = Integer.parseInt(hour);
+//            int minutesi = Integer.parseInt(minutes);
+//            int hoursDurationsArrivali = Integer.parseInt(hoursDurationsArrival);
+//            int minutesDurationsArrivali = Integer.parseInt(minutesDurationsArrival);
+//            int hoursDurationsScalei = Integer.parseInt(hoursDurationsScale);
+//            int minutesDurationsScalei = Integer.parseInt(minutesDurationsScale);
+//
+//            LocalDateTime departureDate = LocalDateTime.of(yeari, monthi, dayi, houri, minutesi);
+//
+//            Plane plane = null;
+//            for (Plane p : this.planes) {
+//                if (planeId.equals(p.getId())) {
+//                    plane = p;
+//                }
+//            }
+//
+//            Location departure = null;
+//            Location arrival = null;
+//            Location scale = null;
+//            for (Location location : this.locations) {
+//                if (departureLocationId.equals(location.getAirportId())) {
+//                    departure = location;
+//                }
+//                if (arrivalLocationId.equals(location.getAirportId())) {
+//                    arrival = location;
+//                }
+//                if (scaleLocationId.equals(location.getAirportId())) {
+//                    scale = location;
+//                }
+//            }
+//
+//            if (scale == null) {
+//                this.flights.add(new Flight(id, plane, departure, arrival, departureDate, hoursDurationsArrivali, minutesDurationsArrivali));
+//            } else {
+//                this.flights.add(new Flight(id, plane, departure, scale, arrival, departureDate, hoursDurationsArrivali, minutesDurationsArrivali, hoursDurationsScalei, minutesDurationsScalei));
+//            }
+//
+//            this.Flight.addItem(id);
+//        }
     }//GEN-LAST:event_CreaterFlightResActionPerformed
+
+    
 
     private void UpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateActionPerformed
         // TODO add your handling code here:
@@ -1766,7 +1757,7 @@ public class AirportFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_AddFlightActionPerformed
 
     private void DelayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DelayActionPerformed
-        // TODO add your handling code here:
+       // TODO add your handling code here:
         String flightId = IDdelay.getItemAt(IDdelay.getSelectedIndex());
         String hours = Hoursdelay.getItemAt(Hoursdelay.getSelectedIndex());
         String minutes = Minutedelay.getItemAt(Minutedelay.getSelectedIndex());
@@ -1795,28 +1786,16 @@ public class AirportFrame extends javax.swing.JFrame {
 //            Hoursdelay.setSelectedIndex(0);
 //            Minutedelay.setSelectedIndex(0);
 //        }
-
-
     }//GEN-LAST:event_DelayActionPerformed
 
     private void RefreshFlightsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshFlightsActionPerformed
         // TODO add your handling code here:
-        long passengerId = Long.parseLong(userSelect.getItemAt(userSelect.getSelectedIndex()));
-
-        Passenger passenger = null;
-        for (Passenger p : this.passengers) {
-            if (p.getId() == passengerId) {
-                passenger = p;
-            }
-        }
-
-        ArrayList<Flight> flights = passenger.getFlights();
-        DefaultTableModel model = (DefaultTableModel) myflights.getModel();
-        model.setRowCount(0);
-        for (Flight flight : flights) {
-            model.addRow(new Object[]{flight.getId(), flight.getDepartureDate(), flight.calculateArrivalDate()});
-        }
+        
     }//GEN-LAST:event_RefreshFlightsActionPerformed
+
+    
+
+
 
     private void RefreshPassengersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshPassengersActionPerformed
         // TODO add your handling code here:
@@ -1853,14 +1832,13 @@ public class AirportFrame extends javax.swing.JFrame {
 
 
     private void RefreshAllFlightsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshAllFlightsActionPerformed
-        // TODO add your handling code here:
         D_Loader_Flight.load_Flights();
-
-        DefaultTableModel model = (DefaultTableModel) flighttable.getModel();
-        model.setRowCount(0);
-        for (Flight flight : Storage_Flight.getInstance().getFlightss()) {
-            model.addRow(new Object[]{flight.getId(), flight.getDepartureLocation().getAirportId(), flight.getArrivalLocation().getAirportId(), (flight.getScaleLocation() == null ? "-" : flight.getScaleLocation().getAirportId()), flight.getDepartureDate(), flight.calculateArrivalDate(), flight.getPlane().getId(), flight.getNumPassengers()});
-        }
+//
+//        DefaultTableModel model = (DefaultTableModel) flighttable.getModel();
+//        model.setRowCount(0);
+//        for (Flight flight : Storage_Flight.getInstance().getFlights()) {
+//            model.addRow(new Object[]{flight.getId(), flight.getDepartureLocation().getAirportId(), flight.getArrivalLocation().getAirportId(), (flight.getScaleLocation() == null ? "-" : flight.getScaleLocation().getAirportId()), flight.getDepartureDate(), flight.calculateArrivalDate(), flight.getPlane().getId(), flight.getNumPassengers()});
+//        }
     }//GEN-LAST:event_RefreshAllFlightsActionPerformed
 
     private void RefreshAllPlanesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshAllPlanesActionPerformed
@@ -1901,9 +1879,9 @@ public class AirportFrame extends javax.swing.JFrame {
 
     private void actualizarTablaDeUbicaciones() {
         DefaultTableModel model = (DefaultTableModel) locationtable.getModel();
-        model.setRowCount(0); 
+        model.setRowCount(0);
 
-        Responses response = LocationController.getAllLocations(); 
+        Responses response = LocationController.getAllLocations();
 
         if (response.getStatus() == Status.OK.getCode() && response.getData() instanceof List) {
             List<Location> locationsList = (List<Location>) response.getData();
@@ -1922,6 +1900,12 @@ public class AirportFrame extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Error refreshing locations: " + response.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    private void actualizarTodo(){
+        actualizarTablaAviones();
+        actualizarTablaDeUbicaciones();
+        actualizarTablaPasajeros();
     }
 
 

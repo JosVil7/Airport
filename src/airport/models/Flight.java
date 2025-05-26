@@ -6,15 +6,16 @@ package airport.models;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author edangulo
  */
 public class Flight {
-    
+
     private final String id;
-    private ArrayList<Passenger> passengers;
+    private List<Passenger> passengers;
     private Plane plane;
     private Location departureLocation;
     private Location scaleLocation;
@@ -24,8 +25,8 @@ public class Flight {
     private int minutesDurationArrival;
     private int hoursDurationScale;
     private int minutesDurationScale;
-    
 
+    // Constructor without scale location
     public Flight(String id, Plane plane, Location departureLocation, Location arrivalLocation, LocalDateTime departureDate, int hoursDurationArrival, int minutesDurationArrival) {
         this.id = id;
         this.passengers = new ArrayList<>();
@@ -35,8 +36,9 @@ public class Flight {
         this.departureDate = departureDate;
         this.hoursDurationArrival = hoursDurationArrival;
         this.minutesDurationArrival = minutesDurationArrival;
-        
-        this.plane.addFlight(this);
+        this.hoursDurationScale = 0;
+        this.minutesDurationScale = 0;
+        // Removed: this.plane.addFlight(this); // This should be handled by the service after creation
     }
 
     public Flight(String id, Plane plane, Location departureLocation, Location scaleLocation, Location arrivalLocation, LocalDateTime departureDate, int hoursDurationArrival, int minutesDurationArrival, int hoursDurationScale, int minutesDurationScale) {
@@ -51,107 +53,97 @@ public class Flight {
         this.minutesDurationArrival = minutesDurationArrival;
         this.hoursDurationScale = hoursDurationScale;
         this.minutesDurationScale = minutesDurationScale;
-        
-        this.plane.addFlight(this);
+        // Removed: this.plane.addFlight(this); // This should be handled by the service after creation
     }
-    
+
     public void addPassenger(Passenger passenger) {
-        this.passengers.add(passenger);
-    }
-    
-    public String getId() {
-        return id;
+        if (!this.passengers.contains(passenger)) {
+            this.passengers.add(passenger);
+        }
     }
 
-    public Location getDepartureLocation() {
-        return departureLocation;
-    }
-
-    public Location getScaleLocation() {
-        return scaleLocation;
-    }
-
-    public Location getArrivalLocation() {
-        return arrivalLocation;
-    }
-
-    public LocalDateTime getDepartureDate() {
-        return departureDate;
-    }
-
-    public int getHoursDurationArrival() {
-        return hoursDurationArrival;
-    }
-
-    public int getMinutesDurationArrival() {
-        return minutesDurationArrival;
-    }
-
-    public int getHoursDurationScale() {
-        return hoursDurationScale;
-    }
-
-    public int getMinutesDurationScale() {
-        return minutesDurationScale;
-    }
-
-    public Plane getPlane() {
-        return plane;
-    }
+    // Getters and Setters
+    public String getId() { return id; }
+    public List<Passenger> getPassengers() { return new ArrayList<>(passengers); }
+    public Plane getPlane() { return plane.clone(); }
+    public Location getDepartureLocation() { return departureLocation.clone(); }
+    public Location getScaleLocation() { return scaleLocation != null ? scaleLocation.clone() : null; }
+    public Location getArrivalLocation() { return arrivalLocation.clone(); }
+    public LocalDateTime getDepartureDate() { return departureDate; }
+    public int getHoursDurationArrival() { return hoursDurationArrival; }
+    public int getMinutesDurationArrival() { return minutesDurationArrival; }
+    public int getHoursDurationScale() { return hoursDurationScale; }
+    public int getMinutesDurationScale() { return minutesDurationScale; }
 
     public void setDepartureDate(LocalDateTime departureDate) {
         this.departureDate = departureDate;
     }
-    
+
     public LocalDateTime calculateArrivalDate() {
-        return departureDate.plusHours(hoursDurationScale).plusHours(hoursDurationArrival).plusMinutes(minutesDurationScale).plusMinutes(minutesDurationArrival);
+        LocalDateTime finalArrival = departureDate;
+        if (scaleLocation != null) {
+            finalArrival = finalArrival.plusHours(hoursDurationScale).plusMinutes(minutesDurationScale);
+        }
+        finalArrival = finalArrival.plusHours(hoursDurationArrival).plusMinutes(minutesDurationArrival);
+        return finalArrival;
     }
-    
+
     public void delay(int hours, int minutes) {
         this.departureDate = this.departureDate.plusHours(hours).plusMinutes(minutes);
     }
-    
+
     public int getNumPassengers() {
         return passengers.size();
     }
-    
+
+    public boolean hasPassenger(long passengerId) {
+        for (Passenger p : this.passengers) {
+            if (p.getId() == passengerId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Copy constructor for Prototype pattern
     public Flight(Flight other) {
-        this.id = other.id;     
+        this.id = other.id;
         this.passengers = new ArrayList<>();
         for (Passenger p : other.passengers) {
-            this.passengers.add(p.clone()); 
+            this.passengers.add(p.clone());
         }
         if (other.plane != null) {
-            this.plane = other.plane.clone(); 
+            this.plane = other.plane.clone();
         } else {
             this.plane = null;
         }
-        
+
         if (other.departureLocation != null) {
-            this.departureLocation = other.departureLocation.clone(); 
+            this.departureLocation = other.departureLocation.clone();
         } else {
             this.departureLocation = null;
         }
-        
+
         if (other.scaleLocation != null) {
-            this.scaleLocation = other.scaleLocation.clone(); 
+            this.scaleLocation = other.scaleLocation.clone();
         } else {
             this.scaleLocation = null;
         }
-        
+
         if (other.arrivalLocation != null) {
-            this.arrivalLocation = other.arrivalLocation.clone(); 
+            this.arrivalLocation = other.arrivalLocation.clone();
         } else {
             this.arrivalLocation = null;
         }
-        this.departureDate = other.departureDate; 
+        this.departureDate = other.departureDate;
         this.hoursDurationArrival = other.hoursDurationArrival;
         this.minutesDurationArrival = other.minutesDurationArrival;
         this.hoursDurationScale = other.hoursDurationScale;
         this.minutesDurationScale = other.minutesDurationScale;
     }
-    
-    public Flight clone(){
+
+    @Override
+    public Flight clone() {
         return new Flight(this);
     }
 }
