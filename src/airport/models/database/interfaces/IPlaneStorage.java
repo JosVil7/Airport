@@ -13,10 +13,7 @@ import org.json.JSONArray;
  * @author USER
  */
 public interface IPlaneStorage {
-    List<Plane> getPlanes();
-    void cargarJSON(JSONArray array);
-    boolean delPlane(String id);
-    Plane getPlane(String id);
     boolean addPlane(Plane plane);
+    Plane getPlane(String id);
     List<Plane> getAllPlanes();
 }

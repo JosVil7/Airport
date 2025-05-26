@@ -53,15 +53,17 @@ public class AirportFrame extends javax.swing.JFrame {
     public AirportFrame() {
         initComponents();
 
-        D_Loader_Passenger.load_Passengers(); 
-        populateUserSelectionComboBox(); 
-        actualizarTablaPasajeros(); 
+        D_Loader_Passenger.load_Passengers();
+        populateUserSelectionComboBox();
+        actualizarTablaPasajeros();
 
         D_Loader_Plane.load_Planes();
         actualizarTablaAviones();
 
         D_Loader_Location.load_Locations();
         actualizarTablaDeUbicaciones();
+        
+        populatePlaneComboBox();
 
         this.passengers = new ArrayList<>();
         this.planes = new ArrayList<>();
@@ -1507,8 +1509,8 @@ public class AirportFrame extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(null, response.getMessage(), "Response Message", JOptionPane.INFORMATION_MESSAGE);
 
-             populateUserSelectionComboBox();
-            
+            populateUserSelectionComboBox();
+
             IDpass.setText("");
             FirstName.setText("");
             LastName.setText("");
@@ -1546,25 +1548,23 @@ public class AirportFrame extends javax.swing.JFrame {
 
         Responses response = PlaneController.createPlane(id, brand, model, maxCapacity, airline);
 
-    if (response.getStatus() >= 500) {
-        JOptionPane.showMessageDialog(this, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
-    } else if (response.getStatus() >= 400) {
-        JOptionPane.showMessageDialog(this, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
-    } else {
-        JOptionPane.showMessageDialog(this, response.getMessage(), "Response Message", JOptionPane.INFORMATION_MESSAGE);
+        if (response.getStatus() >= 500) {
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
+        } else if (response.getStatus() >= 400) {
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Response Message", JOptionPane.INFORMATION_MESSAGE);
 
-        
-        IDair.setText("");
-        Brand.setText("");
-        Model.setText("");
-        MaxCapacity.setText("");
-        Airline.setText("");
+            IDair.setText("");
+            Brand.setText("");
+            Model.setText("");
+            MaxCapacity.setText("");
+            Airline.setText("");
 
-        
-        populatePlaneComboBox();
-    }
+            populatePlaneComboBox();
+        }
     }//GEN-LAST:event_CreateAirActionPerformed
-    
+
     private void populatePlaneComboBox() {
     Plane.removeAllItems(); // Clear existing items
     Plane.addItem("Plane"); // Add default item
@@ -1573,13 +1573,17 @@ public class AirportFrame extends javax.swing.JFrame {
         List<Plane> planes = (List<Plane>) response.getData();
         for (Plane p : planes) {
             Plane.addItem(p.getId());
+            // Also add to IDdelay for flight delay if it refers to plane ID
+            // IDdelay.addItem(p.getId()); // Might be Flight ID, not Plane ID. Confirm usage.
         }
     } else {
-        // No podemos hacerlo en la vista, pero por si en algun momento:
+        // Optionally, show an error if planes couldn't be loaded
         // JOptionPane.showMessageDialog(this, "Error loading planes for selection: " + response.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
 }
     
+    
+
     private void CreateLocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateLocActionPerformed
         // TODO add your handling code here:
         String id = IDairport.getText();
@@ -1808,8 +1812,8 @@ public class AirportFrame extends javax.swing.JFrame {
 
     private void actualizarTablaPasajeros() {
         DefaultTableModel model = (DefaultTableModel) refreshpas.getModel(); // Renamed component
-        model.setRowCount(0); 
-        
+        model.setRowCount(0);
+
         Responses response = PassengerController.getAllPassengers();
 
         if (response.getStatus() == Status.OK.getCode() && response.getData() instanceof List) {
@@ -1849,34 +1853,33 @@ public class AirportFrame extends javax.swing.JFrame {
         actualizarTablaAviones();
     }//GEN-LAST:event_RefreshAllPlanesActionPerformed
     private void actualizarTablaAviones() {
-    DefaultTableModel model = (DefaultTableModel) planetable.getModel(); 
-    model.setRowCount(0); // Clear existing rows
+        DefaultTableModel model = (DefaultTableModel) planetable.getModel();
+        model.setRowCount(0); // Clear existing rows
 
-    Responses response = PlaneController.getAllPlanes(); 
+        Responses response = PlaneController.getAllPlanes();
 
-    if (response.getStatus() == Status.OK.getCode() && response.getData() instanceof List) {
-        List<Plane> planes = (List<Plane>) response.getData();
-        for (Plane plane : planes) {
-            model.addRow(new Object[]{
-                plane.getId(),
-                plane.getBrand(),
-                plane.getModel(),
-                plane.getMaxCapacity(),
-                plane.getAirline(),
-                plane.getNumFlights() 
-            });
+        if (response.getStatus() == Status.OK.getCode() && response.getData() instanceof List) {
+            List<Plane> planes = (List<Plane>) response.getData();
+            for (Plane plane : planes) {
+                model.addRow(new Object[]{
+                    plane.getId(),
+                    plane.getBrand(),
+                    plane.getModel(),
+                    plane.getMaxCapacity(),
+                    plane.getAirline(),
+                    plane.getNumFlights()
+                });
+            }
+        } else if (response.getStatus() == Status.NOT_FOUND.getCode()) {
+            JOptionPane.showMessageDialog(this, response.getMessage(), "Information", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Error refreshing planes: " + response.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-    } else if (response.getStatus() == Status.NOT_FOUND.getCode()) {
-        JOptionPane.showMessageDialog(this, response.getMessage(), "Information", JOptionPane.INFORMATION_MESSAGE);
-    } else {
-        JOptionPane.showMessageDialog(this, "Error refreshing planes: " + response.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
-}
 
 
     private void RefreshLocationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshLocationsActionPerformed
         // TODO add your handling code here:
-
 
         D_Loader_Location.load_Locations();
 
@@ -1889,7 +1892,7 @@ public class AirportFrame extends javax.swing.JFrame {
 
     private void actualizarTablaDeUbicaciones() {
         DefaultTableModel model = (DefaultTableModel) locationtable.getModel();
-        model.setRowCount(0); 
+        model.setRowCount(0);
 
         for (Location location : Storage_Location.getInstance().getLocations()) {
             model.addRow(new Object[]{

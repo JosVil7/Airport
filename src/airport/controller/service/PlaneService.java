@@ -18,17 +18,18 @@ import java.util.List;
  * @author Jose
  */
 public class PlaneService implements IPlaneService {
-   private IPlaneStorage planeStorage; // D de SOLID
+
+    private IPlaneStorage planeStorage; 
 
     public PlaneService() {
         this.planeStorage = Storage_Plane.getInstance(); 
     }
-    
+
     public PlaneService(IPlaneStorage planeStorage) {
         this.planeStorage = planeStorage;
     }
 
-    @Override // Add @Override
+    @Override 
     public Responses createPlane(String id, String brand, String model, String maxCapacity, String airline) {
         Responses validationResponse = PlaneValidator.validateCreate(id, brand, model, maxCapacity, airline);
         if (validationResponse != null) {
@@ -57,7 +58,7 @@ public class PlaneService implements IPlaneService {
         } catch (NumberFormatException e) {
             return new Responses("Max Capacity must be a valid number.", Status.BAD_REQUEST);
         } catch (Exception ex) {
-            ex.printStackTrace(); // Log the exception for debugging
+            ex.printStackTrace(); 
             return new Responses("An unexpected error occurred during plane creation.", Status.INTERNAL_SERVER_ERROR);
         }
     }
@@ -65,11 +66,11 @@ public class PlaneService implements IPlaneService {
     @Override 
     public Responses getAllPlanes() {
         try {
-            List<Plane> planes = planeStorage.getAllPlanes(); // Get all planes from storage
+            List<Plane> planes = planeStorage.getAllPlanes(); 
             if (planes.isEmpty()) {
                 return new Responses("No planes found.", Status.NOT_FOUND);
             }
-            return new Responses("Planes retrieved successfully", Status.OK, planes); // Return the list of planes
+            return new Responses("Planes retrieved successfully", Status.OK, planes); 
         } catch (Exception e) {
             e.printStackTrace();
             return new Responses("An unexpected error occurred while retrieving all planes.", Status.INTERNAL_SERVER_ERROR);

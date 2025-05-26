@@ -14,17 +14,16 @@ import airport.controller.utils.Responses;
  */
 public class PlaneController {
 
-    
-    
     private static IPlaneService planeService = new PlaneService(); 
 
-    // Setter for dependency injection (useful for testing)
+    
     public static void setPlaneService(IPlaneService service) {
         planeService = service;
     }
 
     /**
      * Handles the creation of a new plane.
+     *
      * @param id Plane ID.
      * @param brand Plane brand.
      * @param model Plane model.
@@ -38,6 +37,7 @@ public class PlaneController {
 
     /**
      * Retrieves a list of all planes.
+     *
      * @return A Responses object containing a List of Planes.
      */
     public static Responses getAllPlanes() {

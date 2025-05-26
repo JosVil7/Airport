@@ -22,8 +22,7 @@ public class D_Loader_Plane {
         try{
             String texto = new String(Files.readAllBytes(Paths.get("json/planes.json")));
             JSONArray array = new JSONArray(texto);
-            IPlaneStorage planeStorage = Storage_Plane.getInstance();
-            planeStorage.cargarJSON(array);
+            Storage_Plane.getInstance().cargarJSON(array);
         } catch(Exception e){
             e.printStackTrace();
         }

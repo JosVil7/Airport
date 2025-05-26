@@ -22,26 +22,23 @@ import org.json.JSONObject;
  * @author USER
  */
 
-public class Storage_Plane implements IPlaneStorage {
+public class Storage_Plane implements IPlaneStorage { 
 
-
-    private static IPlaneStorage instance;
+    public static Storage_Plane instance;
     private ArrayList<Plane> planes;
 
     private Storage_Plane() {
         this.planes = new ArrayList<>();
     }
 
-    public static IPlaneStorage getInstance() {
+    public static Storage_Plane getInstance() {
         if (instance == null) {
             instance = new Storage_Plane();
         }
         return instance;
     }
 
-    
-
-    @Override 
+    @Override // Add @Override
     public boolean addPlane(Plane plane) {
         for (Plane pl : this.planes) {
             if (pl.getId().equals(plane.getId())) {
@@ -52,41 +49,29 @@ public class Storage_Plane implements IPlaneStorage {
         return true;
     }
 
-    
-    @Override
-    public Plane getPlane(String id){
-    for (Plane plane : this.planes) {
-        if (plane.getId().equals(id)) {
-            return plane.clone(); 
-        }
-    }
-    return null;
-}
-
-
-     
-    @Override
-    public List<Plane> getAllPlanes() {
-        List<Plane> sortedPlanes = new ArrayList<>(this.planes);
-        
-        // Collections.sort(sortedPlanes, Comparator.comparing(Plane::getId)); // Para Java 8+
-        Collections.sort(sortedPlanes, new Comparator<Plane>() {
-            @Override
-            public int compare(Plane p1, Plane p2) {
-                return p1.getId().compareTo(p2.getId());
+    @Override // Add @Override
+    public Plane getPlane(String id) {
+        for (Plane plane : this.planes) {
+            if (plane.getId().equals(id)) {
+                return plane.clone(); 
             }
-        });
-
-        List<Plane> copiedAndSortedPlanes = new ArrayList<>();
-        for (Plane p : sortedPlanes) {
-            copiedAndSortedPlanes.add(p.clone());
         }
-        return copiedAndSortedPlanes;
+        return null;
+    }
+
+    
+    @Override 
+    public List<Plane> getAllPlanes() { 
+        List<Plane> sortedPlanes = new ArrayList<>(this.planes);
+        Collections.sort(sortedPlanes, Comparator.comparing(Plane::getId));
+
+        List<Plane> copiedPlanes = new ArrayList<>();
+        for (Plane p : sortedPlanes) {
+            copiedPlanes.add(p.clone());
+        }
+        return copiedPlanes;
     }
     
-
-    
-    @Override
     public boolean delPlane(String id) {
         for (Plane plane : this.planes) {
             if (plane.getId().equals(id)) {
@@ -97,7 +82,6 @@ public class Storage_Plane implements IPlaneStorage {
         return false;
     }
 
-    @Override
     public void cargarJSON(JSONArray array) {
         for (int i = 0; i < array.length(); i++) {
             JSONObject objecto = array.getJSONObject(i);
@@ -107,21 +91,11 @@ public class Storage_Plane implements IPlaneStorage {
             final int maxCapacity = objecto.getInt("maxCapacity");
             String airline = objecto.getString("airline");
 
-            // Check if plane already exists to avoid duplicates when loading
-            if (getPlane(id) == null) { // Use getPlane through the interface (or direct method)
+            
+            if (getPlane(id) == null) { 
                 Plane plane = new Plane(id, brand, model, maxCapacity, airline);
-                this.addPlane(plane); // Use addPlane through the interface (or direct method)
+                this.addPlane(plane); 
             }
         }
-    }
-
-    
-    @Override
-    public List<Plane> getPlanes() {
-    ArrayList<Plane> clonedPlanes = new ArrayList<>();
-        for (Plane p : this.planes) {
-        clonedPlanes.add(p.clone());
-        }
-        return clonedPlanes; 
     }
 }
