@@ -4,11 +4,9 @@
  */
 package airport.controller;
 
+import airport.controller.interfaces.IPlaneService;
 import airport.controller.service.PlaneService;
 import airport.controller.utils.Responses;
-import airport.controller.utils.Status;
-import airport.models.Plane;
-import airport.models.database.Storage_Plane;
 
 /**
  *
@@ -16,12 +14,33 @@ import airport.models.database.Storage_Plane;
  */
 public class PlaneController {
 
-    /*
-    Con esta forma en la que se organizan los controladores permite la opcion de open source, ya que en esta clase de Controller se podrian agregar nuevas 
-    clases y paquetes para no cambiar el codigo que ya funciona. Ademas no se puede implementar de forma directa todo SOLID por falta de recursos como interfaces
-    para todo tipo
-    */
+    
+    
+    private static IPlaneService planeService = new PlaneService(); 
+
+    // Setter for dependency injection (useful for testing)
+    public static void setPlaneService(IPlaneService service) {
+        planeService = service;
+    }
+
+    /**
+     * Handles the creation of a new plane.
+     * @param id Plane ID.
+     * @param brand Plane brand.
+     * @param model Plane model.
+     * @param maxCapacity Maximum passenger capacity.
+     * @param airline Airline name.
+     * @return A Responses object indicating the outcome of the operation.
+     */
     public static Responses createPlane(String id, String brand, String model, String maxCapacity, String airline) {
-        return PlaneService.createPlane(id, brand, model, maxCapacity, airline);
+        return planeService.createPlane(id, brand, model, maxCapacity, airline);
+    }
+
+    /**
+     * Retrieves a list of all planes.
+     * @return A Responses object containing a List of Planes.
+     */
+    public static Responses getAllPlanes() {
+        return planeService.getAllPlanes();
     }
 }

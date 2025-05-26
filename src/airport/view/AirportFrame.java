@@ -1546,25 +1546,40 @@ public class AirportFrame extends javax.swing.JFrame {
 
         Responses response = PlaneController.createPlane(id, brand, model, maxCapacity, airline);
 
-        if (response.getStatus() >= 500) {
-            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
-        } else if (response.getStatus() >= 400) {
-            JOptionPane.showMessageDialog(null, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(null, response.getMessage(), "Response Message", JOptionPane.INFORMATION_MESSAGE);
+    if (response.getStatus() >= 500) {
+        JOptionPane.showMessageDialog(this, response.getMessage(), "Error " + response.getStatus(), JOptionPane.ERROR_MESSAGE);
+    } else if (response.getStatus() >= 400) {
+        JOptionPane.showMessageDialog(this, response.getMessage(), "Error " + response.getStatus(), JOptionPane.WARNING_MESSAGE);
+    } else {
+        JOptionPane.showMessageDialog(this, response.getMessage(), "Response Message", JOptionPane.INFORMATION_MESSAGE);
 
-            int max = Integer.parseInt(maxCapacity);
-            this.Plane.addItem(id);
-            this.planes.add(new Plane(id, brand, model, max, airline));
+        
+        IDair.setText("");
+        Brand.setText("");
+        Model.setText("");
+        MaxCapacity.setText("");
+        Airline.setText("");
 
-            IDair.setText("");
-            Brand.setText("");
-            Model.setText("");
-            MaxCapacity.setText("");
-            Airline.setText("");
-        }
+        
+        populatePlaneComboBox();
+    }
     }//GEN-LAST:event_CreateAirActionPerformed
-
+    
+    private void populatePlaneComboBox() {
+    Plane.removeAllItems(); // Clear existing items
+    Plane.addItem("Plane"); // Add default item
+    Responses response = PlaneController.getAllPlanes();
+    if (response.getStatus() == Status.OK.getCode() && response.getData() instanceof List) {
+        List<Plane> planes = (List<Plane>) response.getData();
+        for (Plane p : planes) {
+            Plane.addItem(p.getId());
+        }
+    } else {
+        // No podemos hacerlo en la vista, pero por si en algun momento:
+        // JOptionPane.showMessageDialog(this, "Error loading planes for selection: " + response.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
+    
     private void CreateLocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateLocActionPerformed
         // TODO add your handling code here:
         String id = IDairport.getText();
@@ -1831,31 +1846,32 @@ public class AirportFrame extends javax.swing.JFrame {
 
     private void RefreshAllPlanesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshAllPlanesActionPerformed
         // TODO add your handling code here:
-        D_Loader_Plane.load_Planes();
-
-
-        DefaultTableModel model = (DefaultTableModel) planetable.getModel();
-        model.setRowCount(0);
-        for (Plane plane : Storage_Plane.getInstance().getPlanes()) {
-            model.addRow(new Object[]{plane.getId(), plane.getBrand(), plane.getModel(), plane.getMaxCapacity(), plane.getAirline(), plane.getNumFlights()});
-        }
+        actualizarTablaAviones();
     }//GEN-LAST:event_RefreshAllPlanesActionPerformed
     private void actualizarTablaAviones() {
-        D_Loader_Plane.load_Planes(); // Carga los datos desde el JSON
+    DefaultTableModel model = (DefaultTableModel) planetable.getModel(); 
+    model.setRowCount(0); // Clear existing rows
 
-        DefaultTableModel model = (DefaultTableModel) planetable.getModel(); // tu JTable
-        model.setRowCount(0); // Limpia filas existentes
+    Responses response = PlaneController.getAllPlanes(); 
 
-        for (Plane plane : Storage_Plane.getInstance().getPlanes()) {
+    if (response.getStatus() == Status.OK.getCode() && response.getData() instanceof List) {
+        List<Plane> planes = (List<Plane>) response.getData();
+        for (Plane plane : planes) {
             model.addRow(new Object[]{
                 plane.getId(),
                 plane.getBrand(),
                 plane.getModel(),
                 plane.getMaxCapacity(),
-                plane.getAirline()
+                plane.getAirline(),
+                plane.getNumFlights() 
             });
         }
+    } else if (response.getStatus() == Status.NOT_FOUND.getCode()) {
+        JOptionPane.showMessageDialog(this, response.getMessage(), "Information", JOptionPane.INFORMATION_MESSAGE);
+    } else {
+        JOptionPane.showMessageDialog(this, "Error refreshing planes: " + response.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
+}
 
 
     private void RefreshLocationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshLocationsActionPerformed

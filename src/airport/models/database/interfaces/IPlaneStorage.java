@@ -18,4 +18,5 @@ public interface IPlaneStorage {
     boolean delPlane(String id);
     Plane getPlane(String id);
     boolean addPlane(Plane plane);
+    List<Plane> getAllPlanes();
 }
