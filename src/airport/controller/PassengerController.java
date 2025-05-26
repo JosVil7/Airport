@@ -14,16 +14,11 @@ import airport.controller.utils.Responses;
  */
 public class PassengerController {
 
-    /*
-    Con esta forma en la que se organizan los controladores permite la opcion de open source, ya que en esta clase de Controller se podrian agregar nuevas 
-    clases y paquetes para no cambiar el codigo que ya funciona. Ademas no se puede implementar de forma directa todo SOLID por falta de recursos como interfaces
-    para todo tipo
-    */
     
 
     private static IPassengerService passengerService = new PassengerService(); 
 
-    // Setter for dependency injection (useful for testing)
+    
     public static void setPassengerService(IPassengerService service) {
         passengerService = service;
     }

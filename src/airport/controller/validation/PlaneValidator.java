@@ -13,25 +13,54 @@ import airport.controller.utils.Status;
  */
 public class PlaneValidator {
     
+    /**
+     * Validates all input fields for plane creation.
+     * @param id Plane ID string.
+     * @param brand Plane brand string.
+     * @param model Plane model string.
+     * @param maxCapacity Maximum passenger capacity string.
+     * @param airline Airline name string.
+     * @return A Responses object with BAD_REQUEST status if validation fails, otherwise null.
+     */
     public static Responses validateCreate(String id, String brand, String model, String maxCapacity, String airline) {
-        if (id == null || !id.matches("^[A-Z]{2}\\d{5}$")) {
-            return new Responses("ID must have exactly 2 uppercase letters followed by 5 digits", Status.BAD_REQUEST);
+        
+        
+        if (id == null || id.trim().isEmpty()) {
+            return new Responses("Plane ID must not be empty.", Status.BAD_REQUEST);
         }
+        if (!id.matches("^[A-Z]{2}\\d{5}$")) {
+            return new Responses("Plane ID must have exactly 2 uppercase letters followed by 5 digits (e.g., AB12345).", Status.BAD_REQUEST);
+        }
+
+        
         if (brand == null || brand.trim().isEmpty()) {
-            return new Responses("Brand must be not empty", Status.BAD_REQUEST);
+            return new Responses("Brand must not be empty.", Status.BAD_REQUEST);
         }
+
+        
         if (model == null || model.trim().isEmpty()) {
-            return new Responses("Model must be not empty", Status.BAD_REQUEST);
+            return new Responses("Model must not be empty.", Status.BAD_REQUEST);
         }
+        
         if (maxCapacity == null || maxCapacity.trim().isEmpty()) {
-            return new Responses("Max capacity must be not empty.", Status.BAD_REQUEST);
+            return new Responses("Max capacity must not be empty.", Status.BAD_REQUEST);
         }
         if (!maxCapacity.matches("\\d+")) {
             return new Responses("Max capacity must contain only digits.", Status.BAD_REQUEST);
         }
-        if (airline == null || airline.trim().isEmpty()) {
-            return new Responses("Airline must be not empty", Status.BAD_REQUEST);
+        try {
+            int capacity = Integer.parseInt(maxCapacity);
+            if (capacity <= 0) { // Capacity must be positive
+                return new Responses("Max capacity must be a positive number.", Status.BAD_REQUEST);
+            }
+        } catch (NumberFormatException e) {
+            return new Responses("Invalid Max Capacity format. Must be a valid number.", Status.BAD_REQUEST);
         }
-        return null; 
+        
+        if (airline == null || airline.trim().isEmpty()) {
+            return new Responses("Airline must not be empty.", Status.BAD_REQUEST);
+        }
+
+        return null; // Todo bien :D
     }
 }
