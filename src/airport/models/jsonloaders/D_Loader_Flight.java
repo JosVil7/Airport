@@ -5,6 +5,7 @@
 package airport.models.jsonloaders;
 
 import airport.models.database.Storage_Flight;
+import airport.models.database.interfaces.IFlightStorage;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import org.json.JSONArray;
@@ -18,7 +19,8 @@ public class D_Loader_Flight {
         try{
             String texto = new String(Files.readAllBytes(Paths.get("json/flights.json")));
             JSONArray array = new JSONArray(texto);
-            Storage_Flight.getInstance().cargarJSON(array);
+            IFlightStorage flightStorage = Storage_Flight.getInstance();
+            flightStorage.cargarJSON(array);
         } catch(Exception e){
             e.printStackTrace();
         }

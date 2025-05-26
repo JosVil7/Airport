@@ -8,6 +8,7 @@ import airport.models.database.Storage_Flight;
 import airport.models.database.Storage_Location;
 import airport.models.database.Storage_Passenger;
 import airport.models.database.Storage_Plane;
+import airport.models.database.interfaces.IPlaneStorage;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import org.json.JSONArray;
@@ -21,7 +22,8 @@ public class D_Loader_Plane {
         try{
             String texto = new String(Files.readAllBytes(Paths.get("json/planes.json")));
             JSONArray array = new JSONArray(texto);
-            Storage_Plane.getInstance().cargarJSON(array);
+            IPlaneStorage planeStorage = Storage_Plane.getInstance();
+            planeStorage.cargarJSON(array);
         } catch(Exception e){
             e.printStackTrace();
         }

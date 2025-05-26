@@ -9,7 +9,7 @@ import airport.controller.utils.Responses;
 import airport.controller.utils.Status;
 import airport.controller.validation.PassengerValidator;
 import airport.models.Passenger;
-import airport.models.database.IPassengerStorage;
+import airport.models.database.interfaces.IPassengerStorage;
 import airport.models.database.Storage_Passenger;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;

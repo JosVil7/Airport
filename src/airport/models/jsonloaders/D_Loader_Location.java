@@ -5,6 +5,7 @@
 package airport.models.jsonloaders;
 
 import airport.models.database.Storage_Location;
+import airport.models.database.interfaces.ILocationStorage;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import org.json.JSONArray;
@@ -18,7 +19,8 @@ public class D_Loader_Location {
         try{
             String texto = new String(Files.readAllBytes(Paths.get("json/locations.json")));
             JSONArray array = new JSONArray(texto);
-            Storage_Location.getInstance().cargarJSON(array);
+            ILocationStorage locationStorage = Storage_Location.getInstance();
+            locationStorage.cargarJSON(array); 
         } catch(Exception e){
             e.printStackTrace();
         }

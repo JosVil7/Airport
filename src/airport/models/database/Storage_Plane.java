@@ -7,6 +7,7 @@ package airport.models.database;
 
 import airport.models.Flight;
 import airport.models.Plane;
+import airport.models.database.interfaces.IPlaneStorage;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
@@ -17,7 +18,7 @@ import org.json.JSONObject;
  *
  * @author USER
  */
-public class Storage_Plane {
+public class Storage_Plane implements IPlaneStorage {
 
     public static Storage_Plane instance;
     private ArrayList<Plane> planes;
@@ -32,6 +33,7 @@ public class Storage_Plane {
         return instance;
     }
     
+    @Override
     public boolean addPlane(Plane plane){
         for (Plane pl : this.planes) {
             if (pl.getId().equals(plane.getId())) {
@@ -42,6 +44,7 @@ public class Storage_Plane {
         return true;
     }
     
+    @Override
     public Plane getPlane(String id){
     for (Plane plane : this.planes) {
         if (plane.getId().equals(id)) {
@@ -51,6 +54,7 @@ public class Storage_Plane {
     return null;
 }
     
+    @Override
     public boolean delPlane(String id){
         for (Plane plane : this.planes) {
             if (plane.getId().equals(id)) {
@@ -61,6 +65,7 @@ public class Storage_Plane {
         return false;
     }
     
+    @Override
     public void cargarJSON(JSONArray array){
         for (int i = 0; i < array.length(); i++) {
             JSONObject objecto = array.getJSONObject(i);
@@ -75,6 +80,7 @@ public class Storage_Plane {
         }
     }
     
+    @Override
     public List<Plane> getPlanes() {
     ArrayList<Plane> clonedPlanes = new ArrayList<>();
         for (Plane p : this.planes) {

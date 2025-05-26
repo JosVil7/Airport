@@ -7,6 +7,7 @@ package airport.models.database;
 import airport.models.Flight;
 import airport.models.Location;
 import airport.models.Plane;
+import airport.models.database.interfaces.IFlightStorage;
 import java.time.LocalDateTime;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ import org.json.JSONObject;
  *
  * @author USER
  */
-public class Storage_Flight {
+public class Storage_Flight implements IFlightStorage {
 
     private static Storage_Flight instance;
     private ArrayList<Flight> flights;

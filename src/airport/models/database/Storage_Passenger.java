@@ -4,6 +4,7 @@
  */
 package airport.models.database;
 
+import airport.models.database.interfaces.IPassengerStorage;
 import airport.models.Passenger;
 import java.util.List;
 import java.time.LocalDate;
@@ -79,6 +80,7 @@ public class Storage_Passenger implements IPassengerStorage {
         return false; 
     }
 
+    @Override
     public void cargarJSON(JSONArray array) {
         for (int i = 0; i < array.length(); i++) {
             JSONObject objecto = array.getJSONObject(i);
@@ -99,6 +101,7 @@ public class Storage_Passenger implements IPassengerStorage {
     }
 
     
+    @Override
     public List<Passenger> getPassengers() {
     ArrayList<Passenger> clonedPassengers = new ArrayList<>();
         for (Passenger p : this.passengers) {
